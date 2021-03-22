@@ -2,6 +2,7 @@
 #* Importing Libraries
 import logging
 import traceback
+import pandas as pd
 
 #* Relative Imports
 from common.utils.database.db import DBClass
@@ -82,17 +83,92 @@ class AuthenticationClass:
             Returns:
             --------
             Status (`Boolean`): Status of Insertion.
+                - 0 : Successful
+                - 1 : Insertion Failed
+                - 2 : Email id already exists
+                - 3 : Unknown Error occurred
         '''
 
         logging.info("Authentication : AuthenticationClass : register_user : execution start")
         
-        data = tuple(first_name,last_name,email,password,mobile_number)
-        table_name,cols = self.get_user_tbl_params()
+        try:
+            #? Getting Database Connection
+            connection,_ = self.get_db_connection()
+            
+            #? Checking if Some user exists with the same email address
+            sql_command = f"select u.password from feasta.users u where email_id = '{email}'"
+            password_df = DB_OBJECT.select_records(connection, sql_command)
+            
+            if not isinstance(password_df, pd.DataFrame):
+                #? Function failed to select
+                
+                logging.error(f"Authentication : AuthenticationClass : register_user : function failed : Got Nonetype from Email selection query")
+                return 3
+            
+            elif len(password_df) == 0:
+                #? No user with the same email address
+                
+                #? Building data for insertion
+                data = [(first_name,last_name,email,password,mobile_number)]
+                table_name,cols = self.get_user_tbl_params()
+                
+                #? Inserting data
+                status,_ = DB_OBJECT.insert_records(connection, table_name, data, cols)
+                
+            else:
+                #? User exists with the same email
+                logging.error(f"Authentication : AuthenticationClass : register_user : execution stop : User Exists with the same Email")
+                return 2
+            
+            logging.info(f"Authentication : AuthenticationClass : register_user : execution stop : status = {str(status)}")
+            
+            return status
         
-        connection,_ = self.get_db_connection()
+        except Exception as e:
+            logging.info(f"Authentication : AuthenticationClass : register_user : Function Failed : {str(e)}")
+            return 3
+    
+    def login_user(self, email, password):
+        '''
+            For user regestration.
+            
+            Args:
+            ----
+            email (`String`): Email of the user.
+            password (`String`): Password of the user.
+            
+            Returns:
+            --------
+            Status (`Boolean`): Login Status.
+        '''
+
+        try:
+            logging.info("Authentication : AuthenticationClass : login_user : execution start")
+            
+            connection,_ = self.get_db_connection()
+            
+            sql_command = f"select u.password from feasta.users u where email_id = '{email}'"
+            password_df = DB_OBJECT.select_records(connection, sql_command)
+            
+            if not isinstance(password_df, pd.DataFrame):
+                    #? Function failed to select
+                    
+                    logging.error(f"Authentication : AuthenticationClass : login_user : function failed : Got Nonetype from Email selection query")
+                    return 2
+            
+            original_password = str(password_df['password'][0])
+            
+            if password == original_password:
+                #? Success
+                status = 0
+            else:
+                #? Incorrect Password
+                status = 1
+            
+            logging.info(f"Authentication : AuthenticationClass : login_user : execution stop : status = {str(status)}")
+            
+            return status
         
-        status = DB_OBJECT.insert_records(connection, table_name, data, cols)
-        
-        logging.info(f"Authentication : AuthenticationClass : register_user : execution stop : status = {str(status)}")
-        
-        return status
+        except Exception as e:
+            logging.info(f"Authentication : AuthenticationClass : login_user : Function Failed : {str(e)}")
+            return 2

@@ -1,0 +1,47 @@
+2021-03-22 18:57:38,799 views INFO:Authentication : UserLoginClass : Execution Start
+2021-03-22 18:57:38,800 authentication INFO:Authentication : AuthenticationClass : login_user : execution start
+2021-03-22 18:57:38,800 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-22 18:57:39,164 authentication INFO:8021450245344818218 -3359108120587316644
+2021-03-22 18:57:39,164 authentication INFO:Authentication : AuthenticationClass : login_user : execution stop : status = 1
+2021-03-22 18:57:39,165 views INFO:Authentication : UserLoginClass : Execution End : Incorrect Password
+2021-03-22 18:58:02,634 views INFO:Authentication : UserLoginClass : Execution Start
+2021-03-22 18:58:02,634 authentication INFO:Authentication : AuthenticationClass : login_user : execution start
+2021-03-22 18:58:02,634 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-22 18:58:02,665 authentication INFO:8021450245344818218 -3359108120587316644
+2021-03-22 18:58:02,665 authentication INFO:Authentication : AuthenticationClass : login_user : execution stop : status = 1
+2021-03-22 18:58:02,666 views INFO:Authentication : UserLoginClass : Execution End : Incorrect Password
+2021-03-22 18:59:20,196 views INFO:Authentication : UserRegestrationClass : Execution Start
+2021-03-22 18:59:20,196 authentication INFO:Authentication : AuthenticationClass : register_user : execution start
+2021-03-22 18:59:20,197 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-22 18:59:20,234 authentication ERROR:Authentication : AuthenticationClass : register_user : execution stop : User Exists with the same Email
+2021-03-22 18:59:20,235 views INFO:Authentication : UserRegestrationClass : Execution End : Multiple users with same email id
+2021-03-22 18:59:26,639 views INFO:Authentication : UserLoginClass : Execution Start
+2021-03-22 18:59:26,660 authentication INFO:Authentication : AuthenticationClass : login_user : execution start
+2021-03-22 18:59:26,660 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-22 18:59:26,738 authentication INFO:8021450245344818218 -3359108120587316644
+2021-03-22 18:59:26,739 authentication INFO:Authentication : AuthenticationClass : login_user : execution stop : status = 1
+2021-03-22 18:59:26,739 views INFO:Authentication : UserLoginClass : Execution End : Incorrect Password
+2021-03-22 19:01:54,994 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:01:54,995 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:04:23,239 views INFO:Authentication : UserRegestrationClass : Execution Start
+2021-03-22 19:04:23,239 authentication INFO:Authentication : AuthenticationClass : register_user : execution start
+2021-03-22 19:04:23,239 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-22 19:04:23,383 authentication INFO:Authentication : AuthenticationClass : get_user_tbl_params : execution start
+2021-03-22 19:04:23,383 authentication INFO:Authentication : AuthenticationClass : get_user_tbl_params : execution stop
+2021-03-22 19:04:23,456 authentication INFO:Authentication : AuthenticationClass : register_user : execution stop : status = 0
+2021-03-22 19:04:23,457 views INFO:Authentication : UserRegestrationClass : Execution End : Regestration Successful
+2021-03-22 19:04:39,020 views INFO:Authentication : UserRegestrationClass : Execution Start
+2021-03-22 19:04:39,020 authentication INFO:Authentication : AuthenticationClass : register_user : execution start
+2021-03-22 19:04:39,020 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-22 19:04:39,054 authentication INFO:Authentication : AuthenticationClass : get_user_tbl_params : execution start
+2021-03-22 19:04:39,054 authentication INFO:Authentication : AuthenticationClass : get_user_tbl_params : execution stop
+2021-03-22 19:04:39,069 authentication INFO:Authentication : AuthenticationClass : register_user : execution stop : status = 0
+2021-03-22 19:04:39,069 views INFO:Authentication : UserRegestrationClass : Execution End : Regestration Successful
+2021-03-22 19:05:44,662 views INFO:Authentication : UserLoginClass : Execution Start
+2021-03-22 19:05:44,662 authentication INFO:Authentication : AuthenticationClass : login_user : execution start
+2021-03-22 19:05:44,662 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-22 19:05:44,702 authentication INFO:87654321 87654321
+2021-03-22 19:05:44,703 authentication INFO:Authentication : AuthenticationClass : login_user : execution stop : status = 0
+2021-03-22 19:05:44,704 views INFO:Authentication : UserLoginClass : Execution End : Regestration Successful
+2021-03-22 19:06:46,642 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:06:46,643 selector_events DEBUG:Using selector: EpollSelector

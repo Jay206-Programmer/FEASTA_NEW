@@ -23,12 +23,35 @@ AUTH_OBJECT = auth.AuthenticationClass()
 
 class UserLoginClass(APIView):
         
-        def get(self,request,format=None):
+        def post(self,request,format=None):
                 
                 try:
                     logging.info("Authentication : UserLoginClass : Execution Start")
-                    logging.info("Authentication : UserLoginClass : Execution End")
-                    return Response({"status_code":200,"response_msg":"LOGIN PAGE WORKING"})
+                    
+                    #? Converting Json request from frontend into python dictionary
+                    request_data = json.loads(request.body)
+                    
+                    #? Fatching parameters
+                    email = request_data['email_id']
+                    password = request_data['password']
+                    
+                    status = AUTH_OBJECT.login_user(email,password)
+                    
+                    if status == 0:
+                        #? User Regestration Successful
+                        
+                        logging.info("Authentication : UserLoginClass : Execution End : Regestration Successful")
+                        return Response({"status_code":200,"response_msg":"Login Successful"})
+                    elif status == 1:
+                        #? Wrong Password
+                        
+                        logging.info("Authentication : UserLoginClass : Execution End : Incorrect Password")
+                        return Response({"status_code":500,"response_msg":"Incorrect Password"})
+                    else:
+                        #? Unknown Error Occurred
+                        
+                        logging.info("Authentication : UserLoginClass : Execution End : Unknown Error")
+                        return Response({"status_code":500,"response_msg":"Unknown Error occurred while logging in"})
                         
                 except Exception as e:
                     logging.error(f"Authentication : UserLoginClass : Execution Failed : Error : {str(e)}")
@@ -60,11 +83,21 @@ class UserRegestrationClass(APIView):
                         
                         logging.info("Authentication : UserRegestrationClass : Execution End : Regestration Successful")
                         return Response({"status_code":200,"response_msg":"Regestration Successful"})
-                    else:
-                        #? User Regestration Failed
+                    elif status == 1:
+                        #? Table Insertion Failed
                         
-                        logging.info("Authentication : UserRegestrationClass : Execution End : Regestration Unsuccessful")
-                        return Response({"status_code":500,"response_msg":"Regestration Failed"})
+                        logging.info("Authentication : UserRegestrationClass : Execution End : Table Insertion Failed")
+                        return Response({"status_code":500,"response_msg":"Table Insertion Failed"})
+                    elif status == 2:
+                        #? Multiple Users with same email id
+                        
+                        logging.info("Authentication : UserRegestrationClass : Execution End : Multiple users with same email id")
+                        return Response({"status_code":500,"response_msg":"Multiple users with same email id"})
+                    else:
+                        #? Unknown Error
+                        
+                        logging.info("Authentication : UserRegestrationClass : Execution End : Unknown Error")
+                        return Response({"status_code":500,"response_msg":"Unknown Error"})
                     
                     
                 except Exception as e:
