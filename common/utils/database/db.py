@@ -74,6 +74,21 @@ class DBClass:
             return None,None
             
         return connection,connection_string
+    
+    def close_connection(self, connection):
+        '''
+            Used to Close the connection after its use is done.
+            
+            Args:
+            ----
+            connection (`Object`): Postgres Connection Object.
+            
+            Returns:
+            -------
+            None
+        '''
+        connection.close()
+        return
 
     def create_sequence(self,connection):
         '''

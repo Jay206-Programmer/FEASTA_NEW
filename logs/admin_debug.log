@@ -142,3 +142,5 @@
 2021-03-31 20:51:45,405 selector_events DEBUG:Using selector: EpollSelector
 2021-03-31 20:52:08,990 log WARNING:Not Found: /
 2021-03-31 20:52:09,477 log WARNING:Not Found: /favicon.ico
+2021-03-31 21:18:23,234 log WARNING:Not Found: /
+2021-03-31 21:18:23,990 log WARNING:Not Found: /favicon.ico

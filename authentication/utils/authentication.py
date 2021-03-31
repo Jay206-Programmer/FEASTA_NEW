@@ -100,7 +100,7 @@ class AuthenticationClass:
             
             if not isinstance(password_df, pd.DataFrame):
                 #? Function failed to select
-                
+                connection.close()
                 logging.error(f"Authentication : AuthenticationClass : register_user : function failed : Got Nonetype from Email selection query")
                 return 3
             
@@ -116,14 +116,18 @@ class AuthenticationClass:
                 
             else:
                 #? User exists with the same email
+                connection.close()
                 logging.error(f"Authentication : AuthenticationClass : register_user : execution stop : User Exists with the same Email")
                 return 2
             
             logging.info(f"Authentication : AuthenticationClass : register_user : execution stop : status = {str(status)}")
             
+            connection.close()
             return status
         
         except Exception as e:
+            
+            connection.close()
             logging.info(f"Authentication : AuthenticationClass : register_user : Function Failed : {str(e)}")
             return 3
     
@@ -179,10 +183,12 @@ class AuthenticationClass:
             if not isinstance(password_df, pd.DataFrame):
                     #? Function failed to select
                     
+                    connection.close()
                     logging.error(f"Authentication : AuthenticationClass : login_user : function failed : Got Nonetype from Email selection query")
                     return 2
                 
             elif len(password_df) == 0:
+                connection.close()
                 return 1
             
             original_password = str(password_df['password'][0])
@@ -196,8 +202,10 @@ class AuthenticationClass:
             
             logging.info(f"Authentication : AuthenticationClass : login_user : execution stop : status = {str(status)}")
             
+            connection.close()
             return status
         
         except Exception as e:
+            connection.close()
             logging.info(f"Authentication : AuthenticationClass : login_user : Function Failed : {str(e)}")
             return 2

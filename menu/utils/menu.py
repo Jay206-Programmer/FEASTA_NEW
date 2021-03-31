@@ -125,6 +125,7 @@ class MenuClass:
             #? Function failed to select
             
             logging.error(f"Menu : MenuClass : add_category : function failed : Got Nonetype from Category Name selection query")
+            connection.close()
             return 3
             
         elif len(category_df) == 0:
@@ -139,8 +140,10 @@ class MenuClass:
 
         else:
             logging.error(f"Menu : MenuClass : add_category : function failed : More than one categories with the same name exists")
+            connection.close()
             return 2
 
+        connection.close()
         logging.info("Menu : MenuClass : add_category : execution stop")
 
         return status,index
