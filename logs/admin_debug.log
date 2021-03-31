@@ -45,3 +45,90 @@
 2021-03-22 19:05:44,704 views INFO:Authentication : UserLoginClass : Execution End : Regestration Successful
 2021-03-22 19:06:46,642 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
 2021-03-22 19:06:46,643 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:16:02,025 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:16:02,073 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:16:29,546 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:16:29,547 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:16:39,864 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:16:39,865 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:16:52,836 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:16:52,837 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:16:58,729 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:16:58,730 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:17:02,603 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:17:02,604 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:17:08,178 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:17:08,178 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:17:12,199 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:17:12,200 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:17:15,813 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:17:15,814 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:17:20,693 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:17:20,695 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:17:24,459 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:17:24,459 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:17:31,359 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:17:31,361 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:17:41,185 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:17:41,186 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:17:48,757 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:17:48,767 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:17:53,546 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:17:53,548 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:18:15,907 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:18:15,908 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:18:21,823 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:18:21,825 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:18:27,860 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:18:27,860 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:19:05,914 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:19:05,915 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:19:09,637 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:19:09,638 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:19:13,502 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:19:13,503 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:19:47,141 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/views.py changed, reloading.
+2021-03-22 19:19:47,165 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:19:50,856 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/views.py changed, reloading.
+2021-03-22 19:19:50,857 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:20:04,332 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/views.py changed, reloading.
+2021-03-22 19:20:04,333 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:20:16,479 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/views.py changed, reloading.
+2021-03-22 19:20:16,479 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:20:32,335 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/views.py changed, reloading.
+2021-03-22 19:20:32,336 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:20:38,148 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/views.py changed, reloading.
+2021-03-22 19:20:38,149 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:20:45,951 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/views.py changed, reloading.
+2021-03-22 19:20:45,952 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:20:50,562 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/views.py changed, reloading.
+2021-03-22 19:20:50,565 selector_events DEBUG:Using selector: EpollSelector
+2021-03-22 19:22:40,350 views INFO:Authentication : UserRegestrationClass : Execution Start
+2021-03-22 19:22:40,374 authentication INFO:Authentication : AuthenticationClass : register_user : execution start
+2021-03-22 19:22:40,375 views INFO:Authentication : UserRegestrationClass : Execution End : Invalid Email Format
+2021-03-22 19:22:53,929 views INFO:Authentication : UserRegestrationClass : Execution Start
+2021-03-22 19:22:53,955 authentication INFO:Authentication : AuthenticationClass : register_user : execution start
+2021-03-22 19:22:53,955 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-22 19:22:55,768 authentication INFO:Authentication : AuthenticationClass : get_user_tbl_params : execution start
+2021-03-22 19:22:55,769 authentication INFO:Authentication : AuthenticationClass : get_user_tbl_params : execution stop
+2021-03-22 19:22:55,833 authentication INFO:Authentication : AuthenticationClass : register_user : execution stop : status = 0
+2021-03-22 19:22:55,834 views INFO:Authentication : UserRegestrationClass : Execution End : Regestration Successful
+2021-03-22 19:23:20,188 views INFO:Authentication : UserLoginClass : Execution Start
+2021-03-22 19:23:20,188 authentication INFO:Authentication : AuthenticationClass : login_user : execution start
+2021-03-22 19:23:20,188 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-22 19:23:20,220 authentication INFO:Authentication : AuthenticationClass : login_user : Function Failed : index out of bounds
+2021-03-22 19:23:20,221 views INFO:Authentication : UserLoginClass : Execution End : Unknown Error
+2021-03-22 19:23:26,852 views INFO:Authentication : UserLoginClass : Execution Start
+2021-03-22 19:23:26,853 authentication INFO:Authentication : AuthenticationClass : login_user : execution start
+2021-03-22 19:23:26,853 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-22 19:23:27,047 authentication INFO:Authentication : AuthenticationClass : login_user : execution stop : status = 1
+2021-03-22 19:23:27,047 views INFO:Authentication : UserLoginClass : Execution End : Incorrect Password
+2021-03-22 19:24:16,099 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/authentication/utils/authentication.py changed, reloading.
+2021-03-22 19:24:16,100 selector_events DEBUG:Using selector: EpollSelector
+2021-03-31 19:26:10,918 views INFO:Authentication : UserRegestrationClass : Execution Start
+2021-03-31 19:26:10,983 authentication INFO:Authentication : AuthenticationClass : register_user : execution start
+2021-03-31 19:26:10,983 authentication INFO:Authentication : AuthenticationClass : get_db_connection : function called
+2021-03-31 19:26:20,155 authentication INFO:Authentication : AuthenticationClass : get_user_tbl_params : execution start
+2021-03-31 19:26:20,155 authentication INFO:Authentication : AuthenticationClass : get_user_tbl_params : execution stop
+2021-03-31 19:26:21,087 authentication INFO:Authentication : AuthenticationClass : register_user : execution stop : status = 0
+2021-03-31 19:26:21,088 views INFO:Authentication : UserRegestrationClass : Execution End : Regestration Successful

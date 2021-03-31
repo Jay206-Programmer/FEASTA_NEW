@@ -9,12 +9,7 @@ from common.utils.database.db import DBClass
 
 #* Initializing Logs
 from common.utils.logging.logger import LogClass
-
-user_name = 'admin'
-log_enable = True
-LogObject = LogClass(user_name,log_enable)
-LogObject.log_setting()
-logger = logging.getLogger('authentication')
+logger = LogClass().get_logger('authentication')
 
 #* Defining Objects
 
@@ -92,6 +87,10 @@ class AuthenticationClass:
         logging.info("Authentication : AuthenticationClass : register_user : execution start")
         
         try:
+            if self.email_validation(email) != 0:
+                #? Invalid Email
+                return 4
+            
             #? Getting Database Connection
             connection,_ = self.get_db_connection()
             
@@ -128,6 +127,33 @@ class AuthenticationClass:
             logging.info(f"Authentication : AuthenticationClass : register_user : Function Failed : {str(e)}")
             return 3
     
+    def email_validation(self, x):
+        '''
+            Validates the email syntex.
+            
+            Args:
+            ----
+            x (`String`): Email String
+            
+            Returns:
+            -------
+            flag (`Boolean`): Is it valid or not.
+                - 0 : Valid
+                - 1 : Invalid
+        '''
+        
+        a=0
+        y=len(x)
+        dot=x.find(".")
+        at=x.find("@")
+        for i in range (0,at):
+            if((x[i]>='a' and x[i]<='z') or (x[i]>='A' and x[i]<='Z')):
+                a=a+1
+        if(a>0 and at>0 and (dot-at)>0 and (dot+1)<y):
+            return 0
+        else:
+            return 1
+        
     def login_user(self, email, password):
         '''
             For user regestration.
@@ -155,6 +181,9 @@ class AuthenticationClass:
                     
                     logging.error(f"Authentication : AuthenticationClass : login_user : function failed : Got Nonetype from Email selection query")
                     return 2
+                
+            elif len(password_df) == 0:
+                return 1
             
             original_password = str(password_df['password'][0])
             

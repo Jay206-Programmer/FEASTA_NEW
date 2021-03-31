@@ -1,3 +1,4 @@
 
 # DJANGO IGNORES
 *.log
+__pycache__

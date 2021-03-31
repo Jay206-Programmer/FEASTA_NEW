@@ -10,20 +10,17 @@ import traceback
 from sqlalchemy import create_engine
 
 #? Class Imports
-from ..logging import logger
+from ..logging.logger import LogClass
 
 #? Relative Imports
 from ..Exceptions.common_exceptions.common_exception import *
 
 #? Credential Import
-from .db_credentials import *
+# from .db_credentials import *
+from .heroku_db_creds import *
 
 #? Initializing logger
-user_name = 'admin'
-log_enable = True
-LogObject = logger.LogClass(user_name,log_enable)
-LogObject.log_setting()
-logger = logging.getLogger('Database')
+logger = LogClass().get_logger('database')
 
 class DBClass:
     '''

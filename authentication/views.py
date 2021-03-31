@@ -11,12 +11,7 @@ from .utils import authentication as auth
 
 #* Initializing Logs
 from common.utils.logging.logger import LogClass
-
-user_name = 'admin'
-log_enable = True
-LogObject = LogClass(user_name,log_enable)
-LogObject.log_setting()
-logger = logging.getLogger('auth_views')
+logger = LogClass().get_logger('auth_views')
 
 #* Defining Class Objects
 AUTH_OBJECT = auth.AuthenticationClass()
@@ -93,6 +88,11 @@ class UserRegestrationClass(APIView):
                         
                         logging.info("Authentication : UserRegestrationClass : Execution End : Multiple users with same email id")
                         return Response({"status_code":500,"response_msg":"Multiple users with same email id"})
+                    elif status == 4:
+                        #? Invalid Email Formate
+                        
+                        logging.info("Authentication : UserRegestrationClass : Execution End : Invalid Email Format")
+                        return Response({"status_code":500,"response_msg":"Invalid Email"})
                     else:
                         #? Unknown Error
                         
