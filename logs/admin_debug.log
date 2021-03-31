@@ -132,3 +132,13 @@
 2021-03-31 19:26:20,155 authentication INFO:Authentication : AuthenticationClass : get_user_tbl_params : execution stop
 2021-03-31 19:26:21,087 authentication INFO:Authentication : AuthenticationClass : register_user : execution stop : status = 0
 2021-03-31 19:26:21,088 views INFO:Authentication : UserRegestrationClass : Execution End : Regestration Successful
+2021-03-31 20:08:06,239 autoreload INFO:/home/jay/anaconda3/lib/python3.8/site-packages/six.py changed, reloading.
+2021-03-31 20:08:11,071 selector_events DEBUG:Using selector: EpollSelector
+2021-03-31 20:30:19,725 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/Feasta/settings.py changed, reloading.
+2021-03-31 20:30:19,786 selector_events DEBUG:Using selector: EpollSelector
+2021-03-31 20:30:52,356 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/Feasta/settings.py changed, reloading.
+2021-03-31 20:30:52,358 selector_events DEBUG:Using selector: EpollSelector
+2021-03-31 20:51:45,403 autoreload INFO:/home/jay/Desktop/Feasta/FEASTA_NEW/Feasta/settings.py changed, reloading.
+2021-03-31 20:51:45,405 selector_events DEBUG:Using selector: EpollSelector
+2021-03-31 20:52:08,990 log WARNING:Not Found: /
+2021-03-31 20:52:09,477 log WARNING:Not Found: /favicon.ico

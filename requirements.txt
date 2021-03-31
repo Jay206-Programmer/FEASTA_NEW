@@ -1,0 +1,11 @@
+pandas
+numpy
+psycopg2
+django
+sqlalchemy
+djangorestframework
+requests
+django-cors-headers
+dj-database-url 
+gunicorn 
+whitenoise
