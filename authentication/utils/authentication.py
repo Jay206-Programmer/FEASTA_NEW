@@ -3,9 +3,13 @@
 import logging
 import traceback
 import pandas as pd
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
 
 #* Relative Imports
 from common.utils.database.db import DBClass
+from .users import UsersClass
 
 #* Initializing Logs
 from common.utils.logging.logger import LogClass
@@ -15,7 +19,7 @@ logger = LogClass().get_logger('authentication')
 
 DB_OBJECT = DBClass()
 
-class AuthenticationClass:
+class AuthenticationClass(UsersClass):
     '''
         This Class Handles Authentication related Functionalities.
             - Login
@@ -34,34 +38,6 @@ class AuthenticationClass:
         
         logging.info("Authentication : AuthenticationClass : get_db_connection : function called")
         return DB_OBJECT.database_connection()
-    
-    def get_user_tbl_params(self):
-        '''
-            To get user_tbl related parameters.
-            
-            Args:
-            ----
-            None
-            
-            Returns:
-            -------
-            table_name (`String`): Name of the user table.
-            column_names (`String`): String containing column names saperated by a ",".
-        '''
-        
-        logging.info("Authentication : AuthenticationClass : get_user_tbl_params : execution start")
-        
-        table_name = "feasta.users"
-        column_names = \
-            "first_name, \
-            last_name, \
-            email_id, \
-            password, \
-            mobile_number"
-        
-        logging.info("Authentication : AuthenticationClass : get_user_tbl_params : execution stop")
-        
-        return table_name, column_names
     
     def register_user(self, first_name, last_name, password, email, mobile_number):
         '''
@@ -87,10 +63,6 @@ class AuthenticationClass:
         logging.info("Authentication : AuthenticationClass : register_user : execution start")
         
         try:
-            if self.email_validation(email) != 0:
-                #? Invalid Email
-                return 4
-            
             #? Getting Database Connection
             connection,_ = self.get_db_connection()
             
@@ -99,7 +71,7 @@ class AuthenticationClass:
             password_df = DB_OBJECT.select_records(connection, sql_command)
             
             if not isinstance(password_df, pd.DataFrame):
-                #? Function failed to select
+                #! Function failed to select
                 connection.close()
                 logging.error(f"Authentication : AuthenticationClass : register_user : function failed : Got Nonetype from Email selection query")
                 return 3
@@ -109,11 +81,20 @@ class AuthenticationClass:
                 
                 #? Building data for insertion
                 data = [(first_name,last_name,email,password,mobile_number)]
-                table_name,cols = self.get_user_tbl_params()
+                table_name,cols = super().get_user_tbl_params()
                 
                 #? Inserting data
-                status,_ = DB_OBJECT.insert_records(connection, table_name, data, cols)
-                
+                status,user_id = DB_OBJECT.insert_records(connection, table_name, data, cols, Flag= 1)
+                user_dict = super().get_user_details(user_id, connection)
+
+                if isinstance(user_dict, str):
+                    #? Failed to fetch user details
+                    return 4
+
+                else:
+                    #Send Mail
+                    pass
+
             else:
                 #? User exists with the same email
                 connection.close()

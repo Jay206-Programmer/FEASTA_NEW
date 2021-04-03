@@ -2,6 +2,9 @@
 # DJANGO IGNORES
 *.log
 __pycache__
+feasta-env
+.vscode
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

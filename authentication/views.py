@@ -89,10 +89,10 @@ class UserRegestrationClass(APIView):
                         logging.info("Authentication : UserRegestrationClass : Execution End : Multiple users with same email id")
                         return Response({"status_code":500,"response_msg":"Multiple users with same email id"})
                     elif status == 4:
-                        #? Invalid Email Formate
+                        #? Failed to get User Details
                         
-                        logging.info("Authentication : UserRegestrationClass : Execution End : Invalid Email Format")
-                        return Response({"status_code":500,"response_msg":"Invalid Email"})
+                        logging.info("Authentication : UserRegestrationClass : Execution End : Failed to get User Details")
+                        return Response({"status_code":500,"response_msg":"Failed to get User Details"})
                     else:
                         #? Unknown Error
                         
