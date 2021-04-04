@@ -1,5 +1,6 @@
 
 #* Importing Libraries
+from re import template
 import traceback
 import pandas as pd
 from django.core.mail import EmailMessage
@@ -111,8 +112,11 @@ class AuthenticationClass(UsersClass):
             return 3
     
     def send_email(self,user_name,user_id):
-        template = render_to_string('authentication_email.html',{'user_name': user_name, 'user_id': user_id})
+        with open('authentication_email.html') as tmp:
+            template = tmp.read()
 
+        template = template.replace('{{user_name}}', user_name)
+        template = template.replace('{{user_id}}', user_id)
         email = EmailMessage(
             'Confirm Regestration',
             template,
