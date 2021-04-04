@@ -96,7 +96,7 @@ class AuthenticationClass(UsersClass):
                 else:
                     #? Creating unique id
                     unique_id = str(uuid.uuid1().int)
-                    i = 1
+                    i = 0
                     temp = user_id
                     while temp >= 1:
                         temp /= 10
