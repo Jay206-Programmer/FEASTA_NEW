@@ -232,12 +232,16 @@ class AuthenticationClass(UsersClass):
             
             if status == "1":
                 sql_command = f"update feasta.users set verification_status = '1' where user_id = '{user_id}';"
+                update_status = DB_OBJECT.update_records(connection, sql_command)
+                connection.close()
                 return "Verification Successful, Now visit the site and Login."
             else:
+                connection.close()
                 return "Verification Failed! Use the correct Link."
             
             
         except Exception as e:
+            connection.close()
             return str(e)
 
     def get_user_login_status(self, user_id):
