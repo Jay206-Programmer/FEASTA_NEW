@@ -147,4 +147,56 @@ class LoginStatusClass(APIView):
                 except Exception as e:
                     logging.error(f"LoginStatusClass : Execution Failed : Error : {str(e)}")
                     return Response({"status_code":500,"error_msg":str(e)})
+
+class AdminRegestrationClass(APIView):
         
+        def post(self,request,format=None):
+                
+                try:
+                    logging.info("AdminRegestrationClass : Execution Start")
+                    
+                    #? Converting Json request from frontend into python dictionary
+                    request_data = json.loads(request.body)
+                    
+                    #? Fatching parameters
+                    canteen_name = request.data['canteen_name']
+                    first_name = request_data['first_name']
+                    last_name = request_data['last_name']
+                    email = request_data['email_id']
+                    password = request_data['password']
+                    phone_number = request_data['phone_number']
+                    
+                    status = AUTH_OBJECT.register_admin(first_name,last_name, \
+                                                        password, email, \
+                                                        phone_number, canteen_name)
+                    
+                    if status == 0:
+                        #? Admin Regestration Successful
+                        
+                        logging.info("AdminRegestrationClass : Execution End : Regestration Successful")
+                        return Response({"status_code":200,"response_msg":"Regestration Successful"})
+                    elif status == 1:
+                        #? Table Insertion Failed
+                        
+                        logging.info("AdminRegestrationClass : Execution End : Table Insertion Failed")
+                        return Response({"status_code":500,"response_msg":"Table Insertion Failed"})
+                    elif status == 2:
+                        #? Multiple Users with same email id
+                        
+                        logging.info("AdminRegestrationClass : Execution End : Multiple users with same email id")
+                        return Response({"status_code":500,"response_msg":"Multiple users with same email id"})
+                    elif status == 4:
+                        #? Failed to get User Details
+                        
+                        logging.info("AdminRegestrationClass : Execution End : Failed to get User Details")
+                        return Response({"status_code":500,"response_msg":"Failed to get User Details"})
+                    else:
+                        #? Unknown Error
+                        
+                        logging.info("AdminRegestrationClass : Execution End : Unknown Error")
+                        return Response({"status_code":500,"response_msg":"Unknown Error"})
+                    
+                    
+                except Exception as e:
+                    logging.error(f"AdminRegestrationClass : Execution Failed : Error : {str(e)}")
+                    return Response({"status_code":500,"error_msg":str(e)})

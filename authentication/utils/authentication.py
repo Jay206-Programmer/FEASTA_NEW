@@ -11,6 +11,7 @@ import uuid
 #* Relative Imports
 from common.utils.database.db import DBClass
 from .users import UsersClass
+from .admin import AdminsClass
 from Feasta.settings import *
 
 #* Initializing Logs
@@ -21,7 +22,7 @@ logger = LogClass().get_logger('authentication')
 
 DB_OBJECT = DBClass()
 
-class AuthenticationClass(UsersClass):
+class AuthenticationClass(UsersClass,AdminsClass):
     '''
         This Class Handles Authentication related Functionalities.
             - Login
@@ -291,3 +292,101 @@ class AuthenticationClass(UsersClass):
         except Exception as e:
             logging.error(f"get_user_login_status : Exception Occurred : {str(e)}")
             return -2
+
+    def register_admin(self, first_name, last_name, password, email, mobile_number, canteen_name):
+        '''
+            For user regestration.
+            
+            Args:
+            ----
+            first_name (`String`): First Name of the user.
+            last_name (`String`): Last Name of the user.
+            password (`String`): Password of the user.
+            email (`String`): Email of the user.
+            phone_number (`String`): Phone Number of the user.
+            canteen_name (`String`): Name of the canteen.
+            
+            Returns:
+            --------
+            Status (`Boolean`): Status of Insertion.
+                - 0 : Successful
+                - 1 : Insertion Failed
+                - 2 : Email id already exists
+                - 3 : Unknown Error occurred
+        '''
+
+        logging.info("AuthenticationClass : register_admin : execution start")
+        
+        try:
+            #? Getting Database Connection
+            connection,_ = self.get_db_connection()
+            
+            #? Checking if Some user exists with the same email address
+            sql_command = f"select a.password from feasta.admins a where email_id = '{email}'"
+            password_df = DB_OBJECT.select_records(connection, sql_command)
+            
+            if not isinstance(password_df, pd.DataFrame):
+                #! Function failed to select
+                connection.close()
+                logging.error(f"AuthenticationClass : register_admin : function failed : Got Nonetype from Email selection query")
+                return 3
+            
+            elif len(password_df) == 0:
+                #? No admin with the same email address
+                
+                #? Inserting Canteen Details
+                area = None
+                city = None
+
+                data = [(canteen_name,area,city)]
+                table_name = 'feasta.canteens'
+                cols = 'canteen_name,area,city'
+                status,canteen_id = DB_OBJECT.insert_records(connection, table_name, data, cols, index = 'canteen_id', Flag= 1)
+                
+                #? Building data for insertion
+                data = [(canteen_id,first_name,last_name,email,password,mobile_number)]
+                table_name,cols = super().get_admin_tbl_params()
+                
+                #? Inserting data
+                status,admin_id = DB_OBJECT.insert_records(connection, table_name, data, cols, index = 'admin_id', Flag= 1)
+                admin_dict = super().get_admin_details(admin_id, connection)
+
+                if isinstance(admin_dict, str):
+                    #? Failed to fetch user details
+                    return 4
+
+                else:
+                    #? Creating unique id
+                    unique_id = str(uuid.uuid1().int)
+                    i = 0
+                    temp = admin_id
+                    while temp >= 1:
+                        temp /= 10
+                        i += 1
+                    #? Embedding userid & length of userid
+                    new_unique_id = unique_id+str(admin_id)+str(i)
+                    
+                    sql_command = f"update feasta.admins set verification_code = '{unique_id}' where admin_id = '{admin_id}'"
+                    update_status = DB_OBJECT.update_records(connection, sql_command)
+
+                    #? Sending Email
+                    t1 = threading.Thread(target=self.send_email, args=(admin_dict['first_name'],admin_dict['email_id'],new_unique_id))
+                    t1.start()
+            else:
+                #? User exists with the same email
+                connection.close()
+                logging.error(f"AuthenticationClass : register_admin : execution stop : User Exists with the same Email")
+                return 2
+            
+            logging.info(f"AuthenticationClass : register_admin : execution stop : status = {str(status)}")
+            
+            connection.close()
+            return status
+        
+        except Exception as e:
+            
+            connection.close()
+            logging.info(f"AuthenticationClass : register_admin : Function Failed : {str(e)}")
+            return 3
+    
+    
