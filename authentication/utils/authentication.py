@@ -163,7 +163,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
             
             connection,_ = self.get_db_connection()
             
-            sql_command = f"select u.user_id,u.password from feasta.users u where email_id = '{email}'"
+            sql_command = f"select u.user_id,u.password,u.verification_status from feasta.users u where email_id = '{email}'"
             password_df = DB_OBJECT.select_records(connection, sql_command)
             
             if not isinstance(password_df, pd.DataFrame):
@@ -177,6 +177,11 @@ class AuthenticationClass(UsersClass,AdminsClass):
                 connection.close()
                 return 1,None
             
+            elif int(password_df['verification_status']) == 0:
+                logging.info("AuthenticationClass : login_user : execution stop : Email Verification Remaining")
+                connection.close()
+                return 4,None
+
             original_password = str(password_df['password'][0])
             user_id = str(password_df['user_id'][0])
             user_dict = super().get_user_details(user_id, connection)
@@ -420,7 +425,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
             
             connection,_ = self.get_db_connection()
             
-            sql_command = f"select a.admin_id,a.password from feasta.admins a where email_id = '{email}'"
+            sql_command = f"select a.admin_id,a.password,a.verification_status from feasta.admins a where email_id = '{email}'"
             password_df = DB_OBJECT.select_records(connection, sql_command)
             
             if not isinstance(password_df, pd.DataFrame):
@@ -434,6 +439,11 @@ class AuthenticationClass(UsersClass,AdminsClass):
                 connection.close()
                 return 1,None
             
+            elif int(password_df['verification_status']) == 0:
+                logging.info("AuthenticationClass : login_admin : execution stop : Email Verification Remaining")
+                connection.close()
+                return 4,None
+
             original_password = str(password_df['password'][0])
             admin_id = str(password_df['admin_id'][0])
             admin_dict = super().get_admin_details(admin_id, connection)
@@ -465,3 +475,4 @@ class AuthenticationClass(UsersClass,AdminsClass):
             connection.close()
             logging.info(f"AuthenticationClass : login_admin : Function Failed : {str(e)}")
             return 3,None
+

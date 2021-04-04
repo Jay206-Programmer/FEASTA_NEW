@@ -47,6 +47,11 @@ class UserLoginClass(APIView):
                         
                         logging.info("UserLoginClass : Execution End : Login Status Update Failed")
                         return Response({"status_code":500,"response_msg":"Login Status Update Failed"})
+                    elif status == 4:
+                        #? Email is not verified 
+
+                        logging.info("UserLoginClass : Execution End : Email is not verified")
+                        return Response({"status_code":500,"response_msg":"Please verify the email first!"})
                     else:
                         #? Unknown Error Occurred
                         
@@ -225,7 +230,7 @@ class AdminLoginClass(APIView):
                         #? User Regestration Successful
                         
                         logging.info("AdminLoginClass : Execution End : Regestration Successful")
-                        return Response({"status_code":200,"response_msg":"Login Successful","user_id":f"{admin_dict['admin_id']}","user_name":f"{admin_dict['first_name']}"})
+                        return Response({"status_code":200,"response_msg":"Login Successful","admin_id":f"{admin_dict['admin_id']}","user_name":f"{admin_dict['first_name']}"})
                     elif status == 1:
                         #? Wrong Password
                         
@@ -236,6 +241,11 @@ class AdminLoginClass(APIView):
                         
                         logging.info("AdminLoginClass : Execution End : Login Status Update Failed")
                         return Response({"status_code":500,"response_msg":"Login Status Update Failed"})
+                    elif status == 4:
+                        #? Email is not verified 
+
+                        logging.info("AdminLoginClass : Execution End : Email is not verified")
+                        return Response({"status_code":500,"response_msg":"Please verify the email first!"})
                     else:
                         #? Unknown Error Occurred
                         
