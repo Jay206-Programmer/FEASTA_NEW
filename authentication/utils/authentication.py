@@ -107,7 +107,7 @@ class AuthenticationClass(UsersClass):
                     sql_command = f"update feasta.users set verification_code = '{unique_id}' where user_id = '{user_id}'"
                     update_status = DB_OBJECT.update_records(connection, sql_command)
 
-                    t1 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],unique_id))
+                    t1 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],user_dict['email_id'],unique_id))
                     t1.start()
             else:
                 #? User exists with the same email
@@ -126,7 +126,7 @@ class AuthenticationClass(UsersClass):
             logging.info(f"AuthenticationClass : register_user : Function Failed : {str(e)}")
             return 3
     
-    def send_email(self,user_name,unique_id):
+    def send_email(self,user_name,email,unique_id):
         with open('authentication/utils/authentication_email.html') as tmp:
             template = tmp.read()
 
@@ -136,7 +136,7 @@ class AuthenticationClass(UsersClass):
             'Confirm Regestration',
             template,
             EMAIL_HOST_USER,
-            ["hilaytrivedi.ht@gmail.com"],
+            [email],
         )
         email.fail_silently = False
         email.send()
