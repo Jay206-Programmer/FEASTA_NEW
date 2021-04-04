@@ -112,7 +112,7 @@ class AuthenticationClass(UsersClass):
             return 3
     
     def send_email(self,user_name,user_id):
-        with open('./authentication_email.html') as tmp:
+        with open('authentication/utils/authentication_email.html') as tmp:
             template = tmp.read()
 
         template = template.replace('{{user_name}}', user_name)
