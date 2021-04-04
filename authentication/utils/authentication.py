@@ -178,6 +178,13 @@ class AuthenticationClass(UsersClass):
             
             original_password = str(password_df['password'][0])
             user_id = str(password_df['user_id'][0])
+            user_dict = super().get_user_details(user_id, connection)
+            user_dict['user_id'] = user_id
+
+            if isinstance(user_dict, str):
+                #? Failed to fetch user details
+                return 3,None
+
             if password == original_password:
                 #? Success
                 status = 0
@@ -193,7 +200,7 @@ class AuthenticationClass(UsersClass):
             logging.info(f"AuthenticationClass : login_user : execution stop : status = {str(status)}")
             
             connection.close()
-            return status,user_id
+            return status,user_dict
         
         except Exception as e:
             connection.close()

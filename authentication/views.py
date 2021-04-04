@@ -30,13 +30,13 @@ class UserLoginClass(APIView):
                     email = request_data['email_id']
                     password = request_data['password']
                     
-                    status,user_id = AUTH_OBJECT.login_user(email,password)
+                    status,user_dict = AUTH_OBJECT.login_user(email,password)
                     
                     if status == 0:
                         #? User Regestration Successful
                         
                         logging.info("UserLoginClass : Execution End : Regestration Successful")
-                        return Response({"status_code":200,"response_msg":"Login Successful","user_id":f"{user_id}"})
+                        return Response({"status_code":200,"response_msg":"Login Successful","user_id":f"{user_dict['user_id']}","user_name":f"{user_dict['first_name']}"})
                     elif status == 1:
                         #? Wrong Password
                         
