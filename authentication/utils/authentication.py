@@ -222,17 +222,20 @@ class AuthenticationClass(UsersClass):
             #? Getting Database Connection
             connection,_ = self.get_db_connection()
 
-            sql_command = f"select case when u.verification_code = '{u_id}' then 'True' else 'False' end as status from feasta.users u  where u.user_id = '{user_id}'"
+            sql_command = f"select case when u.verification_code = '{u_id}' then '1' else '0' end as status from feasta.users u  where u.user_id = '{user_id}'"
             status_df = DB_OBJECT.select_records(connection, sql_command)
-            connection.close()
-
+            
             if not isinstance(status_df,pd.DataFrame):
+                connection.close()
                 return "Server Error! Retry Clicking on that link."
             status = str(status_df['status'][0])
-            if status == "True":
+            
+            if status == "1":
+                sql_command = f"update feasta.users set verification_status = '1' where user_id = '{user_id}';"
                 return "Verification Successful, Now visit the site and Login."
             else:
                 return "Verification Failed! Use the correct Link."
+            
             
         except Exception as e:
             return str(e)
