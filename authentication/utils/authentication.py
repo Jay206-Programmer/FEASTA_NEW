@@ -27,7 +27,7 @@ class AuthenticationClass(UsersClass):
             - Login
             - Register
     '''
-    
+
     def get_db_connection(self):
         '''
             To get Database Connection object.
@@ -201,8 +201,79 @@ class AuthenticationClass(UsersClass):
             return 3,None
 
     def verify_uniqueid(self, u_id):
-        length = int(u_id[-1])
-        u_id = u_id[:-1]
-        user_id = u_id[len(u_id)-length:]
-        u_id = u_id[:len(u_id)-length]
-        return user_id,u_id
+        '''
+            Used to Verify the email id.
+
+            Args:
+            -----
+            u_id (`String`): Unique id received from the url.
+
+            Returns:
+            -------
+            Message (`String`): Message that will be shown when the user clicks the link in email.
+        '''
+
+        try:
+            length = int(u_id[-1])
+            u_id = u_id[:-1]
+            user_id = u_id[len(u_id)-length:]
+            u_id = u_id[:len(u_id)-length]
+            
+            #? Getting Database Connection
+            connection,_ = self.get_db_connection()
+
+            sql_command = f"select case when u.verification_code = '{u_id}' then 'True' else 'False' end as status from feasta.users u  where u.user_id = '{user_id}'"
+            status_df = DB_OBJECT.select_records(connection, sql_command)
+            connection.close()
+
+            if not isinstance(status_df,pd.DataFrame):
+                return "Server Error! Retry Clicking on that link."
+            status = str(status_df['status'][0])
+            if status == "True":
+                return "Verification Successful, Now visit the site and Login."
+            else:
+                return "Verification Failed! Use the correct Link."
+            
+        except Exception as e:
+            return str(e)
+
+    def get_user_login_status(self, user_id):
+        '''
+            Used to get login status of the user.
+
+            Args:
+            ----
+            user_id (`String | Int`): Id of the user.
+
+            Return:
+            ------
+            status (`Integer`): Status of the login
+                - 0 : User is not logged in. 
+                - 1 : User is logged in.
+                - -1 : No user found for that user id
+                - -2 : Failed to fetch the data 
+        '''
+        try:
+            #? Getting Database Connection
+            connection,_ = self.get_db_connection()
+
+            sql_command = f"select u.login_status from feasta.users u where u.user_id = '{str(user_id)}'"
+            login_status_df = DB_OBJECT.select_records(connection, sql_command)
+            connection.close()
+
+            if not isinstance(login_status_df,pd.DataFrame):
+                #? Failed To extract user data
+                logging.info(f"get_user_login_status : Failed to extract login status for user {user_id}")
+                return -2
+            
+            elif len(login_status_df) == 0:
+                logging.info(f"get_user_login_status : No user for user_id {user_id}")
+                return -1
+
+            else:
+                logging.info("get_user_login_status : Successfully fetched User login status")
+                return int(login_status_df['login_status'][0])
+        
+        except Exception as e:
+            logging.error(f"get_user_login_status : Exception Occurred : {str(e)}")
+            return -2

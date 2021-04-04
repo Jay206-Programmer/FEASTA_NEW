@@ -110,5 +110,41 @@ class UserRegestrationClass(APIView):
                     return Response({"status_code":500,"error_msg":str(e)})
         
 def verify_user(request, unique_id):
-    print(AUTH_OBJECT.verify_uniqueid(unique_id))
-    return HttpResponse("Verification Done", content_type='text/plain')
+    message = AUTH_OBJECT.verify_uniqueid(unique_id)
+    return HttpResponse(message, content_type='text/plain')
+
+class LoginStatusClass(APIView):
+        
+        def post(self,request,format=None):
+                
+                try:
+                    logging.info("LoginStatusClass : Execution Start")
+                    
+                    #? Converting Json request from frontend into python dictionary
+                    request_data = json.loads(request.body)
+                    
+                    #? Fatching parameters
+                    user_id = request_data['user_id']
+                    
+                    status = AUTH_OBJECT.get_user_login_status(user_id)
+                    
+                    if status == -1:
+                        #? Can't find the user_id
+
+                        logging.info("LoginStatusClass : Execution End : Can't Find User")
+                        return Response({"status_code":200,"response_msg":"Can't Find the User","status":f"{status}"})
+                    elif status == -2:
+                        #? Failed to fetch
+                        
+                        logging.info("LoginStatusClass : Execution End : Failed to get data from the database")
+                        return Response({"status_code":500,"response_msg":"Failed to get data from the database","status":f"{status}"})
+                    else:
+                        #? Successfully Fetched
+                        
+                        logging.info("LoginStatusClass : Execution End : Login Status Fetch Successful")
+                        return Response({"status_code":200,"response_msg":"Fetch Successful","status": f"{status}"})
+                        
+                except Exception as e:
+                    logging.error(f"LoginStatusClass : Execution Failed : Error : {str(e)}")
+                    return Response({"status_code":500,"error_msg":str(e)})
+        
