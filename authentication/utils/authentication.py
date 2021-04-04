@@ -35,7 +35,7 @@ class AuthenticationClass(UsersClass):
             connection_string (`String`): Postgres Connection url.
         '''
         
-        logging.info("Authentication : AuthenticationClass : get_db_connection : function called")
+        logging.info("AuthenticationClass : get_db_connection : function called")
         return DB_OBJECT.database_connection()
     
     def register_user(self, first_name, last_name, password, email, mobile_number):
@@ -59,7 +59,7 @@ class AuthenticationClass(UsersClass):
                 - 3 : Unknown Error occurred
         '''
 
-        logging.info("Authentication : AuthenticationClass : register_user : execution start")
+        logging.info("AuthenticationClass : register_user : execution start")
         
         try:
             #? Getting Database Connection
@@ -72,7 +72,7 @@ class AuthenticationClass(UsersClass):
             if not isinstance(password_df, pd.DataFrame):
                 #! Function failed to select
                 connection.close()
-                logging.error(f"Authentication : AuthenticationClass : register_user : function failed : Got Nonetype from Email selection query")
+                logging.error(f"AuthenticationClass : register_user : function failed : Got Nonetype from Email selection query")
                 return 3
             
             elif len(password_df) == 0:
@@ -97,10 +97,10 @@ class AuthenticationClass(UsersClass):
             else:
                 #? User exists with the same email
                 connection.close()
-                logging.error(f"Authentication : AuthenticationClass : register_user : execution stop : User Exists with the same Email")
+                logging.error(f"AuthenticationClass : register_user : execution stop : User Exists with the same Email")
                 return 2
             
-            logging.info(f"Authentication : AuthenticationClass : register_user : execution stop : status = {str(status)}")
+            logging.info(f"AuthenticationClass : register_user : execution stop : status = {str(status)}")
             
             connection.close()
             return status
@@ -108,7 +108,7 @@ class AuthenticationClass(UsersClass):
         except Exception as e:
             
             connection.close()
-            logging.info(f"Authentication : AuthenticationClass : register_user : Function Failed : {str(e)}")
+            logging.info(f"AuthenticationClass : register_user : Function Failed : {str(e)}")
             return 3
     
     def email_validation(self, x):
@@ -153,7 +153,7 @@ class AuthenticationClass(UsersClass):
         '''
 
         try:
-            logging.info("Authentication : AuthenticationClass : login_user : execution start")
+            logging.info("AuthenticationClass : login_user : execution start")
             
             connection,_ = self.get_db_connection()
             
@@ -164,7 +164,7 @@ class AuthenticationClass(UsersClass):
                     #? Function failed to select
                     
                     connection.close()
-                    logging.error(f"Authentication : AuthenticationClass : login_user : function failed : Got Nonetype from Email selection query")
+                    logging.error(f"AuthenticationClass : login_user : function failed : Got Nonetype from Email selection query")
                     return 2
                 
             elif len(password_df) == 0:
@@ -180,12 +180,12 @@ class AuthenticationClass(UsersClass):
                 #? Incorrect Password
                 status = 1
             
-            logging.info(f"Authentication : AuthenticationClass : login_user : execution stop : status = {str(status)}")
+            logging.info(f"AuthenticationClass : login_user : execution stop : status = {str(status)}")
             
             connection.close()
             return status
         
         except Exception as e:
             connection.close()
-            logging.info(f"Authentication : AuthenticationClass : login_user : Function Failed : {str(e)}")
+            logging.info(f"AuthenticationClass : login_user : Function Failed : {str(e)}")
             return 2

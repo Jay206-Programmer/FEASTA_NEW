@@ -31,7 +31,7 @@ class UsersClass:
             connection_string (`String`): Postgres Connection url.
         '''
         
-        logging.info("Authentication : AuthenticationClass : get_db_connection : function called")
+        logging.info("AuthenticationClass : get_db_connection : function called")
         return DB_OBJECT.database_connection()
     
     def get_user_tbl_params(self):
@@ -48,7 +48,7 @@ class UsersClass:
             column_names (`String`): String containing column names saperated by a ",".
         '''
         
-        logging.info("Authentication : AuthenticationClass : get_user_tbl_params : execution start")
+        logging.info("AuthenticationClass : get_user_tbl_params : execution start")
         
         table_name = "feasta.users"
         column_names = \
@@ -58,7 +58,7 @@ class UsersClass:
             password, \
             mobile_number"
         
-        logging.info("Authentication : AuthenticationClass : get_user_tbl_params : execution stop")
+        logging.info("AuthenticationClass : get_user_tbl_params : execution stop")
         
         return table_name, column_names
 
@@ -82,7 +82,7 @@ class UsersClass:
         '''
 
         try:
-            logging.info("Users : UsersClass : get_user_details : execution start")
+            logging.info("UsersClass : get_user_details : execution start")
         
             created_conn = False
             if connection == None:
@@ -101,7 +101,7 @@ class UsersClass:
             #? Is dataframe returned Properly?
             if not isinstance(user_details_df, pd.DataFrame):
                 #? Function failed to select
-                logging.error(f"Users : UsersClass : get_user_details : execution failed : Got Nonetype from Email selection query")
+                logging.error(f"UsersClass : get_user_details : execution failed : Got Nonetype from Email selection query")
                 return "Nonetype Error"
             
             #? No data found?
@@ -120,7 +120,7 @@ class UsersClass:
                 password = user_details_df['password'][0]
                 mobile_number = user_details_df['mobile_number'][0]
 
-            logging.info("Users : UsersClass : get_user_details : execution stop")
+            logging.info("UsersClass : get_user_details : execution stop")
 
             return {
                 'first_name' :first_name,
@@ -132,6 +132,6 @@ class UsersClass:
 
         except Exception as e:
             
-            logging.info(f"Users : UsersClass : get_user_details : execution failed : {str(e)}")
+            logging.info(f"UsersClass : get_user_details : execution failed : {str(e)}")
             return str(e)
     

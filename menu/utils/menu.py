@@ -35,7 +35,7 @@ class MenuClass:
             connection_string (`String`): Postgres Connection url.
         '''
         
-        logging.info("Menu : MenuClass : get_db_connection : function called")
+        logging.info("MenuClass : get_db_connection : function called")
         return DB_OBJECT.database_connection()
     
     def get_category_tbl_params(self):
@@ -52,7 +52,7 @@ class MenuClass:
             column_names (`String`): String containing column names saperated by a ",".
         '''
         
-        logging.info("Menu : MenuClass : get_category_tbl_params : execution start")
+        logging.info("MenuClass : get_category_tbl_params : execution start")
         
         table_name = "feasta.category"
         column_names = \
@@ -61,7 +61,7 @@ class MenuClass:
             category_desc, \
             image_path"
             
-        logging.info("Menu : MenuClass : get_category_tbl_params : execution stop")
+        logging.info("MenuClass : get_category_tbl_params : execution stop")
         
         return table_name, column_names
     
@@ -79,7 +79,7 @@ class MenuClass:
             column_names (`String`): String containing column names saperated by a ",".
         '''
         
-        logging.info("Menu : MenuClass : get_menu_tbl_params : execution start")
+        logging.info("MenuClass : get_menu_tbl_params : execution start")
         
         table_name = "feasta.menu"
         column_names = \
@@ -89,7 +89,7 @@ class MenuClass:
             price, \
             image_path"
             
-        logging.info("Menu : MenuClass : get_menu_tbl_params : execution stop")
+        logging.info("MenuClass : get_menu_tbl_params : execution stop")
         
         return table_name, column_names
     
@@ -110,7 +110,7 @@ class MenuClass:
             category_index (`Integer`): Index of the entry in the category table.
         '''
 
-        logging.info("Menu : MenuClass : add_category : execution start")
+        logging.info("MenuClass : add_category : execution start")
 
         #? Getting Database Connection
         connection,_ = self.get_db_connection()
@@ -122,7 +122,7 @@ class MenuClass:
         if not isinstance(category_df, pd.DataFrame):
             #? Function failed to select
             
-            logging.error(f"Menu : MenuClass : add_category : function failed : Got Nonetype from Category Name selection query")
+            logging.error(f"MenuClass : add_category : function failed : Got Nonetype from Category Name selection query")
             connection.close()
             return 3
             
@@ -137,11 +137,11 @@ class MenuClass:
             status,index = DB_OBJECT.insert_records(connection, table_name, data, cols, Flag=1)
 
         else:
-            logging.error(f"Menu : MenuClass : add_category : function failed : More than one categories with the same name exists")
+            logging.error(f"MenuClass : add_category : function failed : More than one categories with the same name exists")
             connection.close()
             return 2
 
         connection.close()
-        logging.info("Menu : MenuClass : add_category : execution stop")
+        logging.info("MenuClass : add_category : execution stop")
 
         return status,index
