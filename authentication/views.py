@@ -41,7 +41,7 @@ class UserLoginClass(APIView):
                         #? Wrong Password
                         
                         logging.info("UserLoginClass : Execution End : Incorrect Password")
-                        return Response({"status_code":500,"response_msg":"Incorrect Password"})
+                        return Response({"status_code":500,"response_msg":"Incorrect Email or Password"})
                     else:
                         #? Unknown Error Occurred
                         

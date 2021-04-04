@@ -136,7 +136,7 @@ class AuthenticationClass(UsersClass):
             'Confirm Regestration',
             template,
             EMAIL_HOST_USER,
-            ["jayshukla0034@gmail.com"],
+            ["hilaytrivedi.ht@gmail.com"],
         )
         email.fail_silently = False
         email.send()
