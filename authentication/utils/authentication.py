@@ -1,6 +1,5 @@
 
 #* Importing Libraries
-import logging
 import traceback
 import pandas as pd
 from django.core.mail import EmailMessage
@@ -12,7 +11,7 @@ from common.utils.database.db import DBClass
 from .users import UsersClass
 
 #* Initializing Logs
-from common.utils.logging.logger import LogClass
+from common.utils.logging.logger import *
 logger = LogClass().get_logger('authentication')
 
 #* Defining Objects

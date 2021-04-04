@@ -1,7 +1,6 @@
 
 #* Importing Libraries
 import json
-import logging
 import traceback
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -10,7 +9,7 @@ from rest_framework.response import Response
 from .utils import authentication as auth
 
 #* Initializing Logs
-from common.utils.logging.logger import LogClass
+from common.utils.logging.logger import *
 logger = LogClass().get_logger('auth_views')
 
 #* Defining Class Objects
