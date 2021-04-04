@@ -3,12 +3,12 @@
 import traceback
 import pandas as pd
 from django.core.mail import EmailMessage
-from django.conf import settings
 from django.template.loader import render_to_string
 
 #* Relative Imports
 from common.utils.database.db import DBClass
 from .users import UsersClass
+from Feasta.settings import *
 
 #* Initializing Logs
 from common.utils.logging.logger import *
@@ -91,9 +91,8 @@ class AuthenticationClass(UsersClass):
                     return 4
 
                 else:
-                    #Send Mail
-                    pass
-
+                    status = self.send_email(user_dict['first_name'],user_id)
+                    
             else:
                 #? User exists with the same email
                 connection.close()
@@ -111,6 +110,19 @@ class AuthenticationClass(UsersClass):
             logging.info(f"AuthenticationClass : register_user : Function Failed : {str(e)}")
             return 3
     
+    def send_email(self,user_name,user_id):
+        template = render_to_string('./authentication_email.html',{'user_name': user_name, 'user_id': user_id})
+
+        email = EmailMessage(
+            'Confirm Regestration',
+            template,
+            EMAIL_HOST_USER,
+            ["jayshukla0034@gmail.com"],
+        )
+        email.fail_silently = False
+        email.send()
+        return 0
+
     def email_validation(self, x):
         '''
             Validates the email syntex.
