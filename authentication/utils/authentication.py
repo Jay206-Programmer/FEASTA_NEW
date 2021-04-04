@@ -182,7 +182,7 @@ class AuthenticationClass(UsersClass):
                 #? Success
                 status = 0
                 sql_command = f"update feasta.users set login_status = '1'  where user_id = '{user_id}';"
-                update_status = DB_OBJECT.update_records()
+                update_status = DB_OBJECT.update_records(connection, sql_command)
                 if update_status == 1: 
                     logging.error("AuthenticationClass : login user : function failed : Failed to update the login status")
                     status = 2
