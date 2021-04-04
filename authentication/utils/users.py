@@ -1,14 +1,12 @@
 
 #* Importing Libraries
-import logging
-import traceback
 import pandas as pd
 
 #* Relative Imports
 from common.utils.database.db import DBClass
 
 #* Initializing Logs
-from common.utils.logging.logger import LogClass
+from common.utils.logging.logger import *
 logger = LogClass().get_logger('authentication')
 
 #* Defining Objects
