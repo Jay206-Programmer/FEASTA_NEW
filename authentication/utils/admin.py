@@ -96,7 +96,7 @@ class AdminsClass:
                 connection,_ = self.get_db_connection()
 
             #? Getting User Table Name
-            table_name,cols = self.get_user_tbl_params()
+            table_name,cols = self.get_admin_tbl_params()
             
             sql_command = f"select a.*,c.canteen_name,c.area,c.city from {table_name} a ,feasta.canteens c where a.admin_id = '{admin_id}' and a.canteen_id = c.canteen_id "
             logging.info("Sql_Command -> "+sql_command)
