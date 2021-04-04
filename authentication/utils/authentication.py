@@ -198,5 +198,5 @@ class AuthenticationClass(UsersClass):
         length = int(u_id[-1])
         u_id = u_id[:-1]
         user_id = u_id[len(u_id)-length:]
-        u_id = u_id[:u_id[len(u_id)-length]]
+        u_id = u_id[:len(u_id)-length]
         return user_id,u_id
