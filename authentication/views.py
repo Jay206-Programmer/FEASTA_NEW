@@ -111,11 +111,11 @@ class UserRegestrationClass(APIView):
         
 def verify_user(request, unique_id):
     message = AUTH_OBJECT.verify_uniqueid(unique_id)
-    return HttpResponse(message, content_type='text/plain')
+    return HttpResponse(message, content_type='text/html')
 
 def verify_admin(request, unique_id):
     message = AUTH_OBJECT.verify_uniqueid(unique_id,flag = 1)
-    return HttpResponse(message, content_type='text/plain')
+    return HttpResponse(message, content_type='text/html')
 
 class LoginStatusClass(APIView):
         
@@ -204,3 +204,45 @@ class AdminRegestrationClass(APIView):
                 except Exception as e:
                     logging.error(f"AdminRegestrationClass : Execution Failed : Error : {str(e)}")
                     return Response({"status_code":500,"error_msg":str(e)})
+
+class AdminLoginClass(APIView):
+        
+        def post(self,request,format=None):
+                
+                try:
+                    logging.info("AdminLoginClass : Execution Start")
+                    
+                    #? Converting Json request from frontend into python dictionary
+                    request_data = json.loads(request.body)
+                    
+                    #? Fatching parameters
+                    email = request_data['email_id']
+                    password = request_data['password']
+                    
+                    status,admin_dict = AUTH_OBJECT.login_admin(email,password)
+                    
+                    if status == 0:
+                        #? User Regestration Successful
+                        
+                        logging.info("AdminLoginClass : Execution End : Regestration Successful")
+                        return Response({"status_code":200,"response_msg":"Login Successful","user_id":f"{admin_dict['admin_id']}","user_name":f"{admin_dict['first_name']}"})
+                    elif status == 1:
+                        #? Wrong Password
+                        
+                        logging.info("AdminLoginClass : Execution End : Incorrect Password")
+                        return Response({"status_code":500,"response_msg":"Incorrect Email or Password"})
+                    elif status == 2:
+                        #? Login Status Update Failed                        
+                        
+                        logging.info("AdminLoginClass : Execution End : Login Status Update Failed")
+                        return Response({"status_code":500,"response_msg":"Login Status Update Failed"})
+                    else:
+                        #? Unknown Error Occurred
+                        
+                        logging.info("AdminLoginClass : Execution End : Unknown Error")
+                        return Response({"status_code":500,"response_msg":"Unknown Error occurred while logging in"})
+                        
+                except Exception as e:
+                    logging.error(f"AdminLoginClass : Execution Failed : Error : {str(e)}")
+                    return Response({"status_code":500,"error_msg":str(e)})
+        

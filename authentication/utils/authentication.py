@@ -184,6 +184,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
 
             if isinstance(user_dict, str):
                 #? Failed to fetch user details
+                connection.close()
                 return 3,None
 
             if password == original_password:
@@ -399,4 +400,68 @@ class AuthenticationClass(UsersClass,AdminsClass):
             logging.info(f"AuthenticationClass : register_admin : Function Failed : {str(e)}")
             return 3
     
-    
+    def login_admin(self, email, password):
+        '''
+            For user regestration.
+            
+            Args:
+            ----
+            email (`String`): Email of the user.
+            password (`String`): Password of the user.
+            
+            Returns:
+            --------
+            Status (`Boolean`): Login Status.
+            admin_id (`String`): admin_id of the logged in admin.
+        '''
+
+        try:
+            logging.info("AuthenticationClass : login_admin : execution start")
+            
+            connection,_ = self.get_db_connection()
+            
+            sql_command = f"select a.admin_id,a.password from feasta.admins a where email_id = '{email}'"
+            password_df = DB_OBJECT.select_records(connection, sql_command)
+            
+            if not isinstance(password_df, pd.DataFrame):
+                    #? Function failed to select
+                    
+                    connection.close()
+                    logging.error(f"AuthenticationClass : login_admin : function failed : Got Nonetype from Email selection query")
+                    return 3,None
+                
+            elif len(password_df) == 0:
+                connection.close()
+                return 1,None
+            
+            original_password = str(password_df['password'][0])
+            admin_id = str(password_df['admin_id'][0])
+            admin_dict = super().get_admin_details(admin_id, connection)
+            admin_dict['admin_id'] = admin_id
+
+            if isinstance(admin_dict, str):
+                #? Failed to fetch admin details
+                connection.close()
+                return 3,None
+
+            if password == original_password:
+                #? Success
+                status = 0
+                sql_command = f"update feasta.admins set login_status = '1'  where admin_id = '{admin_id}';"
+                update_status = DB_OBJECT.update_records(connection, sql_command)
+                if update_status == 1: 
+                    logging.error("AuthenticationClass : login user : function failed : Failed to update the login status")
+                    status = 2
+            else:
+                #? Incorrect Password
+                status = 1
+            
+            logging.info(f"AuthenticationClass : login_admin : execution stop : status = {str(status)}")
+            
+            connection.close()
+            return status,admin_dict
+        
+        except Exception as e:
+            connection.close()
+            logging.info(f"AuthenticationClass : login_admin : Function Failed : {str(e)}")
+            return 3,None
