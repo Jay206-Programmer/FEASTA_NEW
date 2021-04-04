@@ -113,6 +113,10 @@ def verify_user(request, unique_id):
     message = AUTH_OBJECT.verify_uniqueid(unique_id)
     return HttpResponse(message, content_type='text/plain')
 
+def verify_admin(request, unique_id):
+    message = AUTH_OBJECT.verify_uniqueid(unique_id,flag = 1)
+    return HttpResponse(message, content_type='text/plain')
+
 class LoginStatusClass(APIView):
         
         def post(self,request,format=None):

@@ -108,7 +108,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
                     sql_command = f"update feasta.users set verification_code = '{unique_id}' where user_id = '{user_id}'"
                     update_status = DB_OBJECT.update_records(connection, sql_command)
 
-                    t1 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],user_dict['email_id'],new_unique_id))
+                    t1 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],user_dict['email_id'],new_unique_id,'authentication/utils/authentication_email.html'))
                     t1.start()
             else:
                 #? User exists with the same email
@@ -127,8 +127,8 @@ class AuthenticationClass(UsersClass,AdminsClass):
             logging.info(f"AuthenticationClass : register_user : Function Failed : {str(e)}")
             return 3
     
-    def send_email(self,user_name,email,unique_id):
-        with open('authentication/utils/authentication_email.html') as tmp:
+    def send_email(self,user_name,email,unique_id,template_path):
+        with open(template_path) as tmp:
             template = tmp.read()
 
         template = template.replace('{{user_name}}', str(user_name))
@@ -208,13 +208,16 @@ class AuthenticationClass(UsersClass,AdminsClass):
             logging.info(f"AuthenticationClass : login_user : Function Failed : {str(e)}")
             return 3,None
 
-    def verify_uniqueid(self, u_id):
+    def verify_uniqueid(self, u_id, flag = 0):
         '''
             Used to Verify the email id.
 
             Args:
             -----
             u_id (`String`): Unique id received from the url.
+            flag (`String`): Who is verifying?
+                - 0 : User
+                - 1 : Admin
 
             Returns:
             -------
@@ -227,10 +230,17 @@ class AuthenticationClass(UsersClass,AdminsClass):
             user_id = u_id[len(u_id)-length:]
             u_id = u_id[:len(u_id)-length]
             
+            if flag == 0:
+                table_name = 'feasta.users'
+                index = 'user_id'
+            elif flag == 1:
+                table_name = 'feasta.admins'
+                index = 'admin_id'
+
             #? Getting Database Connection
             connection,_ = self.get_db_connection()
 
-            sql_command = f"select case when u.verification_code = '{u_id}' then '1' else '0' end as status from feasta.users u  where u.user_id = '{user_id}'"
+            sql_command = f"select case when u.verification_code = '{u_id}' then '1' else '0' end as status from {table_name} u  where u.{index} = '{user_id}'"
             status_df = DB_OBJECT.select_records(connection, sql_command)
             
             if not isinstance(status_df,pd.DataFrame):
@@ -239,7 +249,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
             status = str(status_df['status'][0])
             
             if status == "1":
-                sql_command = f"update feasta.users set verification_status = '1' where user_id = '{user_id}';"
+                sql_command = f"update {table_name} set verification_status = '1' where {index} = '{user_id}';"
                 update_status = DB_OBJECT.update_records(connection, sql_command)
                 connection.close()
                 return "Verification Successful, Now visit the site and Login."
@@ -370,7 +380,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
                     update_status = DB_OBJECT.update_records(connection, sql_command)
 
                     #? Sending Email
-                    t1 = threading.Thread(target=self.send_email, args=(admin_dict['first_name'],admin_dict['email_id'],new_unique_id))
+                    t1 = threading.Thread(target=self.send_email, args=(admin_dict['first_name'],admin_dict['email_id'],new_unique_id,'authentication/utils/Admin_Authentication_Mail.html'))
                     t1.start()
             else:
                 #? User exists with the same email

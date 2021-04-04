@@ -8,5 +8,6 @@ urlpatterns = [
     path('auth/regestration/',UserRegestrationClass.as_view()),
     path('auth/admin_regestration/',AdminRegestrationClass.as_view()),
     path('verify/<str:unique_id>',verify_user),
+    path('verify/admin/<str:unique_id>',verify_admin),
     path('auth/get_login_status/',LoginStatusClass.as_view()),
 ]
