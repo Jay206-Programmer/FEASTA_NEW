@@ -6,6 +6,7 @@ import pandas as pd
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 import threading
+import uuid
 
 #* Relative Imports
 from common.utils.database.db import DBClass
@@ -93,7 +94,12 @@ class AuthenticationClass(UsersClass):
                     return 4
 
                 else:
-                    t1 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],user_id))
+                    unique_id = str(uuid.uuid1().int)
+                    
+                    sql_command = f"update feasta.users set verification_code = '{unique_id}' where user_id = '{user_id}'"
+                    update_status = DB_OBJECT.update_records(connection, sql_command)
+
+                    t1 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],unique_id))
                     t1.start()
             else:
                 #? User exists with the same email
