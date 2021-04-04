@@ -30,18 +30,23 @@ class UserLoginClass(APIView):
                     email = request_data['email_id']
                     password = request_data['password']
                     
-                    status = AUTH_OBJECT.login_user(email,password)
+                    status,user_id = AUTH_OBJECT.login_user(email,password)
                     
                     if status == 0:
                         #? User Regestration Successful
                         
                         logging.info("UserLoginClass : Execution End : Regestration Successful")
-                        return Response({"status_code":200,"response_msg":"Login Successful"})
+                        return Response({"status_code":200,"response_msg":"Login Successful","user_id":f"{user_id}"})
                     elif status == 1:
                         #? Wrong Password
                         
                         logging.info("UserLoginClass : Execution End : Incorrect Password")
                         return Response({"status_code":500,"response_msg":"Incorrect Email or Password"})
+                    elif status == 2:
+                        #? Login Status Update Failed                        
+                        
+                        logging.info("UserLoginClass : Execution End : Login Status Update Failed")
+                        return Response({"status_code":500,"response_msg":"Login Status Update Failed"})
                     else:
                         #? Unknown Error Occurred
                         

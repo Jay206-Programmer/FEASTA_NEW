@@ -102,12 +102,12 @@ class AuthenticationClass(UsersClass):
                         temp /= 10
                         i += 1
                     #? Embedding userid & length of userid
-                    unique_id = unique_id+str(user_id)+str(i)
+                    new_unique_id = unique_id+str(user_id)+str(i)
                     
                     sql_command = f"update feasta.users set verification_code = '{unique_id}' where user_id = '{user_id}'"
                     update_status = DB_OBJECT.update_records(connection, sql_command)
 
-                    t1 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],user_dict['email_id'],unique_id))
+                    t1 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],user_dict['email_id'],new_unique_id))
                     t1.start()
             else:
                 #? User exists with the same email
@@ -136,7 +136,7 @@ class AuthenticationClass(UsersClass):
             'Confirm Regestration',
             template,
             EMAIL_HOST_USER,
-            [email],
+            ["jayshukla0034@gmail.com"],
         )
         email.fail_silently = False
         email.send()
@@ -154,6 +154,7 @@ class AuthenticationClass(UsersClass):
             Returns:
             --------
             Status (`Boolean`): Login Status.
+            user_id (`String`): User_id of the logged in user.
         '''
 
         try:
@@ -161,7 +162,7 @@ class AuthenticationClass(UsersClass):
             
             connection,_ = self.get_db_connection()
             
-            sql_command = f"select u.password from feasta.users u where email_id = '{email}'"
+            sql_command = f"select u.user_id,u.password from feasta.users u where email_id = '{email}'"
             password_df = DB_OBJECT.select_records(connection, sql_command)
             
             if not isinstance(password_df, pd.DataFrame):
@@ -169,17 +170,22 @@ class AuthenticationClass(UsersClass):
                     
                     connection.close()
                     logging.error(f"AuthenticationClass : login_user : function failed : Got Nonetype from Email selection query")
-                    return 2
+                    return 3,None
                 
             elif len(password_df) == 0:
                 connection.close()
-                return 1
+                return 1,None
             
             original_password = str(password_df['password'][0])
-            
+            user_id = str(password_df['user_id'][0])
             if password == original_password:
                 #? Success
                 status = 0
+                sql_command = f"update feasta.users set login_status = '1'  where user_id = '{user_id}';"
+                update_status = DB_OBJECT.update_records()
+                if update_status == 1: 
+                    logging.error("AuthenticationClass : login user : function failed : Failed to update the login status")
+                    status = 2
             else:
                 #? Incorrect Password
                 status = 1
@@ -187,12 +193,12 @@ class AuthenticationClass(UsersClass):
             logging.info(f"AuthenticationClass : login_user : execution stop : status = {str(status)}")
             
             connection.close()
-            return status
+            return status,user_id
         
         except Exception as e:
             connection.close()
             logging.info(f"AuthenticationClass : login_user : Function Failed : {str(e)}")
-            return 2
+            return 3,None
 
     def verify_uniqueid(self, u_id):
         length = int(u_id[-1])
