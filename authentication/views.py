@@ -4,6 +4,7 @@ import json
 import traceback
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import HttpResponse
 
 #* Relative Imports
 from .utils import authentication as auth
@@ -103,3 +104,6 @@ class UserRegestrationClass(APIView):
                     logging.error(f"UserRegestrationClass : Execution Failed : Error : {str(e)}")
                     return Response({"status_code":500,"error_msg":str(e)})
         
+def verify_user(request, unique_id):
+    print(AUTH_OBJECT.verify_uniqueid(unique_id))
+    return HttpResponse("Verification Done", content_type='text/plain')

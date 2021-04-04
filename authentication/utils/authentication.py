@@ -94,7 +94,15 @@ class AuthenticationClass(UsersClass):
                     return 4
 
                 else:
+                    #? Creating unique id
                     unique_id = str(uuid.uuid1().int)
+                    i = 1
+                    temp = user_id
+                    while temp >= 1:
+                        temp /= 10
+                        i += 1
+                    #? Embedding userid & length of userid
+                    unique_id = unique_id+str(user_id)+str(i)
                     
                     sql_command = f"update feasta.users set verification_code = '{unique_id}' where user_id = '{user_id}'"
                     update_status = DB_OBJECT.update_records(connection, sql_command)
@@ -118,12 +126,12 @@ class AuthenticationClass(UsersClass):
             logging.info(f"AuthenticationClass : register_user : Function Failed : {str(e)}")
             return 3
     
-    def send_email(self,user_name,user_id):
+    def send_email(self,user_name,unique_id):
         with open('authentication/utils/authentication_email.html') as tmp:
             template = tmp.read()
 
         template = template.replace('{{user_name}}', str(user_name))
-        template = template.replace('{{user_id}}', str(user_id))
+        template = template.replace('{{user_id}}', str(unique_id))
         email = EmailMessage(
             'Confirm Regestration',
             template,
@@ -134,33 +142,6 @@ class AuthenticationClass(UsersClass):
         email.send()
         return 0
 
-    def email_validation(self, x):
-        '''
-            Validates the email syntex.
-            
-            Args:
-            ----
-            x (`String`): Email String
-            
-            Returns:
-            -------
-            flag (`Boolean`): Is it valid or not.
-                - 0 : Valid
-                - 1 : Invalid
-        '''
-        
-        a=0
-        y=len(x)
-        dot=x.find(".")
-        at=x.find("@")
-        for i in range (0,at):
-            if((x[i]>='a' and x[i]<='z') or (x[i]>='A' and x[i]<='Z')):
-                a=a+1
-        if(a>0 and at>0 and (dot-at)>0 and (dot+1)<y):
-            return 0
-        else:
-            return 1
-        
     def login_user(self, email, password):
         '''
             For user regestration.
@@ -212,3 +193,10 @@ class AuthenticationClass(UsersClass):
             connection.close()
             logging.info(f"AuthenticationClass : login_user : Function Failed : {str(e)}")
             return 2
+
+    def verify_uniqueid(self, u_id):
+        length = int(u_id[-1])
+        u_id = u_id[:-1]
+        user_id = u_id[len(u_id)-length:]
+        u_id = u_id[:u_id[len(u_id)-length]]
+        return user_id,u_id
