@@ -175,7 +175,7 @@ class DBClass:
             cursor.close() # Close the cursor
             return 1 # If failed.
         
-    def insert_records(self,connection,table_name,row_tuples,cols,Flag=0):
+    def insert_records(self,connection,table_name,row_tuples,cols,index ='index',Flag=0):
         """This function is used to insert data into database table.
 
         Args:
@@ -201,7 +201,7 @@ class DBClass:
                 extras.execute_values(cursor, query, tuples) # Excute insert query.
                 index = 0
             else:
-                query = "INSERT INTO %s(%s) VALUES %%s RETURNING index" % (table_name, cols) # Make query
+                query = "INSERT INTO %s(%s) VALUES %%s RETURNING %s" % (table_name, cols, index) # Make query
                 extras.execute_values(cursor, query, tuples) # Excute insert query.
                 index = [row[0] for row in cursor.fetchall()][0]
             

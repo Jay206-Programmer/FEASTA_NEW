@@ -83,7 +83,7 @@ class AuthenticationClass(UsersClass):
                 table_name,cols = super().get_user_tbl_params()
                 
                 #? Inserting data
-                status,user_id = DB_OBJECT.insert_records(connection, table_name, data, cols, Flag= 1)
+                status,user_id = DB_OBJECT.insert_records(connection, table_name, data, cols, index = 'user_id', Flag= 1)
                 user_dict = super().get_user_details(user_id, connection)
 
                 if isinstance(user_dict, str):
