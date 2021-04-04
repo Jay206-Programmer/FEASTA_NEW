@@ -111,7 +111,7 @@ class AuthenticationClass(UsersClass):
             return 3
     
     def send_email(self,user_name,user_id):
-        template = render_to_string('./authentication_email.html',{'user_name': user_name, 'user_id': user_id})
+        template = render_to_string('authentication_email.html',{'user_name': user_name, 'user_id': user_id})
 
         email = EmailMessage(
             'Confirm Regestration',
