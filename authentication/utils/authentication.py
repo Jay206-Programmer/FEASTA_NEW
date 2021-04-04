@@ -5,6 +5,7 @@ import traceback
 import pandas as pd
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+import threading
 
 #* Relative Imports
 from common.utils.database.db import DBClass
@@ -92,8 +93,8 @@ class AuthenticationClass(UsersClass):
                     return 4
 
                 else:
-                    status = self.send_email(user_dict['first_name'],user_id)
-                    
+                    t1 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],user_id))
+                    t1.start()
             else:
                 #? User exists with the same email
                 connection.close()
@@ -115,8 +116,8 @@ class AuthenticationClass(UsersClass):
         with open('authentication/utils/authentication_email.html') as tmp:
             template = tmp.read()
 
-        template = template.replace('{{user_name}}', user_name)
-        template = template.replace('{{user_id}}', user_id)
+        template = template.replace('{{user_name}}', str(user_name))
+        template = template.replace('{{user_id}}', str(user_id))
         email = EmailMessage(
             'Confirm Regestration',
             template,
