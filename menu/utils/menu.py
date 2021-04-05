@@ -148,4 +148,32 @@ class MenuClass:
     
     def get_category_details(self,admin_id):
         
-        sql_command = f"select * from "
+        try:
+            logging.info("MenuClass : get_category_details : execution start")
+            
+            #? Getting Database Connection
+            connection,_ = self.get_db_connection()
+            
+            #? Getting Data from the database
+            sql_command = f"select * from feasta.category c where c.admin_id = '{admin_id}'"
+            category_df = DB_OBJECT.select_records(connection, sql_command)
+            connection.close()
+            
+            if not isinstance(category_df, pd.DataFrame):
+                logging.error("MenuClass : get_category_details : Failed to fetch the Dataframe")
+                return 1,None
+            
+            else:
+                logging.info(f"MenuClass : get_category_details : execution stop : categories => {str(category_df)}")
+                data = []
+                for i,dta in category_df.iterrows():
+                    dic = {}
+                    dic['category_id'] = dta['category_id']
+                    dic['category_name'] = dta['category_name']
+                    data.append(dic)
+
+                return 0,data
+        
+        except Exception as e:
+            logging.error(f"MenuClass : get_category_details : Function Failed : error => {str(e)}")
+            return 1,None

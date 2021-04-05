@@ -60,4 +60,34 @@ class AddCategoryClass(APIView):
         except Exception as e:
             logging.error(f"AddCategoryClass : Execution failed : Error => {str(e)}")
             return Response({"status_code":500,"response_msg":str(e)})
+
+class GetCategoryDetailsClass(APIView):
+    
+    def post(self, request, format = None):
+        
+        try:
+            logging.info("GetCategoryDetailsClass : Execution Start")
+            
+            #? Converting Json request from frontend into python dictionary
+            request_data = json.loads(request.body)
+            
+            #? Fatching parameters
+            admin_id = request_data['admin_id']
+            
+            status, data = MENU_OBJ.get_category_details(admin_id)
+            
+            if status == 0:
+                #? Successful Retrival
+                
+                logging.info("GetCategoryDetailsClass : Execution End : Successful Retrival")
+                return Response({"status_code":200,"response_msg":"Successful Retrival", "data": json.dumps(data)})
+            elif status == 1:
+                #? Retrival Unsuccessful
+                
+                logging.info("GetCategoryDetailsClass : Execution End : Retrival Unsuccessful")
+                return Response({"status_code":500,"response_msg":"Retrival Unsuccessful"})
+            
+        except Exception as e:
+            logging.error(f"GetCategoryDetailsClass : Execution failed : Error => {str(e)}")
+            return Response({"status_code":500,"response_msg":str(e)})
         
