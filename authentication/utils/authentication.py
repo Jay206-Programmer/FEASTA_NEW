@@ -175,7 +175,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
                 
             elif len(password_df) == 0:
                 connection.close()
-                return 1,None
+                return 5,None
             
             elif int(password_df['verification_status']) == 0:
                 logging.info("AuthenticationClass : login_user : execution stop : Email Verification Remaining")
@@ -437,7 +437,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
                 
             elif len(password_df) == 0:
                 connection.close()
-                return 1,None
+                return 5,None
             
             elif int(password_df['verification_status']) == 0:
                 logging.info("AuthenticationClass : login_admin : execution stop : Email Verification Remaining")

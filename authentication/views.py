@@ -52,6 +52,11 @@ class UserLoginClass(APIView):
 
                         logging.info("UserLoginClass : Execution End : Email is not verified")
                         return Response({"status_code":500,"response_msg":"Please verify the email first!"})
+                    elif status == 5:
+                        #? Regestration remaining 
+
+                        logging.info("AdminLoginClass : Execution End : User is not registered")
+                        return Response({"status_code":500,"response_msg":"You are not registered yet, please register first!"})
                     else:
                         #? Unknown Error Occurred
                         
@@ -246,6 +251,11 @@ class AdminLoginClass(APIView):
 
                         logging.info("AdminLoginClass : Execution End : Email is not verified")
                         return Response({"status_code":500,"response_msg":"Please verify the email first!"})
+                    elif status == 5:
+                        #? Regestration remaining 
+
+                        logging.info("AdminLoginClass : Execution End : Admin is not registered")
+                        return Response({"status_code":500,"response_msg":"You are not registered yet, please register first!"})
                     else:
                         #? Unknown Error Occurred
                         
