@@ -68,9 +68,6 @@ class GetCategoryDetailsClass(APIView):
         try:
             logging.info("GetCategoryDetailsClass : Execution Start")
             
-            #? Converting Json request from frontend into python dictionary
-            request_data = json.loads(request.body)
-            
             #? Fatching parameters
             admin_id = request.query_params.get('admin_id')
             
