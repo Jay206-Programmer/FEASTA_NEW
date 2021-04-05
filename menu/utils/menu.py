@@ -147,7 +147,20 @@ class MenuClass:
         return status,index
     
     def get_category_details(self,admin_id):
-        
+        '''
+            Get all the categories for given admin.
+            
+            Args:
+            -----
+            admin_id (`String | Int`): Id of the admin.
+            
+            Returns:
+            -------
+            status (`Integer`): Status of the retrival
+                - 0 : Successful
+                - 1 : Unsuccessful
+            data (`Array of Dictionary`): Category Data
+        '''
         try:
             logging.info("MenuClass : get_category_details : execution start")
             
@@ -177,3 +190,58 @@ class MenuClass:
         except Exception as e:
             logging.error(f"MenuClass : get_category_details : Function Failed : error => {str(e)}")
             return 1,None
+        
+    def add_item(self, item_name, item_desc, category_id, price, image_path):
+        '''
+            To add Item to the database.
+            
+            Args:
+            ----
+            item_name (`String`): Name of the item.
+            item_desc (`String`): Description of the item.
+            category_id (`String | Int`): Id of the category
+            price (`String | Int`): Price of the product.
+            image_path (`String`): Path where the image is stored.
+            
+            Returns:
+            -------
+            status (`Integer`): Status of the insertion.
+            menu_id (`Integer`): Index of the entry in the category table.
+        '''
+
+        logging.info("MenuClass : add_item : execution start")
+
+        #? Getting Database Connection
+        connection,_ = self.get_db_connection()
+            
+        #? Checking if Some user exists with the same email address
+        # sql_command = f"select c.category_id from feasta.category c where c.category_name  = '{category_name}' and c.admin_id = '{admin_id}'"
+        # category_df = DB_OBJECT.select_records(connection, sql_command)
+
+        # if not isinstance(category_df, pd.DataFrame):
+        #     #? Function failed to select
+            
+        #     logging.error(f"MenuClass : add_item : function failed : Got Nonetype from Category Name selection query")
+        #     connection.close()
+        #     return 3, None
+            
+        # elif len(category_df) == 0:
+        #     #? No category with the same name
+                
+        #     #? Building data for insertion
+        #     data = [(admin_id,category_name,category_desc,image_path)]
+        #     table_name,cols = self.get_category_tbl_params()
+            
+        #     #? Inserting data
+        #     status,index = DB_OBJECT.insert_records(connection, table_name, data, cols, index= 'category_id',Flag=1)
+
+        # else:
+        #     logging.error(f"MenuClass : add_item : function failed : More than one categories with the same name exists")
+        #     connection.close()
+        #     return 2, None
+
+        connection.close()
+        logging.info("MenuClass : add_item : execution stop")
+
+        return # status,index
+    
