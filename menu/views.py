@@ -80,7 +80,7 @@ class GetCategoryDetailsClass(APIView):
                 #? Successful Retrival
                 
                 logging.info("GetCategoryDetailsClass : Execution End : Successful Retrival")
-                return Response({"status_code":200,"response_msg":"Successful Retrival", "data": json.dumps(data)})
+                return Response({"status_code":200,"response_msg":"Successful Retrival", "data": data})
             elif status == 1:
                 #? Retrival Unsuccessful
                 
