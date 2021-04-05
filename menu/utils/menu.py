@@ -134,7 +134,7 @@ class MenuClass:
             table_name,cols = self.get_category_tbl_params()
             
             #? Inserting data
-            status,index = DB_OBJECT.insert_records(connection, table_name, data, cols, Flag=1)
+            status,index = DB_OBJECT.insert_records(connection, table_name, data, cols, index= 'category_id',Flag=1)
 
         else:
             logging.error(f"MenuClass : add_category : function failed : More than one categories with the same name exists")
