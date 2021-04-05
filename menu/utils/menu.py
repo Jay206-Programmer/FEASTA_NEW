@@ -145,3 +145,7 @@ class MenuClass:
         logging.info("MenuClass : add_category : execution stop")
 
         return status,index
+    
+    def get_category_details(self,admin_id):
+        
+        sql_command = f"select * from "

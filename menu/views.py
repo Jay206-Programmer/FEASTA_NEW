@@ -16,7 +16,7 @@ logger = LogClass().get_logger('menu_views')
 #* Defining Class Objects
 MENU_OBJ = menu.MenuClass()
 
-class AddCategoryClass():
+class AddCategoryClass(APIView):
     
     def post(self, request, format = None):
         
