@@ -63,7 +63,7 @@ class AddCategoryClass(APIView):
 
 class GetCategoryDetailsClass(APIView):
     
-    def post(self, request, format = None):
+    def get(self, request, format = None):
         
         try:
             logging.info("GetCategoryDetailsClass : Execution Start")
@@ -72,7 +72,7 @@ class GetCategoryDetailsClass(APIView):
             request_data = json.loads(request.body)
             
             #? Fatching parameters
-            admin_id = request_data['admin_id']
+            admin_id = request.query_params.get('admin_id')
             
             status, data = MENU_OBJ.get_category_details(admin_id)
             
