@@ -65,7 +65,7 @@ class UserLoginClass(APIView):
                         
                 except Exception as e:
                     logging.error(f"UserLoginClass : Execution Failed : Error : {str(e)}")
-                    return Response({"status_code":500,"error_msg":str(e)})
+                    return Response({"status_code":500,"response_msg":str(e)})
         
 class UserRegestrationClass(APIView):
         
@@ -117,7 +117,7 @@ class UserRegestrationClass(APIView):
                     
                 except Exception as e:
                     logging.error(f"UserRegestrationClass : Execution Failed : Error : {str(e)}")
-                    return Response({"status_code":500,"error_msg":str(e)})
+                    return Response({"status_code":500,"response_msg":str(e)})
         
 def verify_user(request, unique_id):
     message = AUTH_OBJECT.verify_uniqueid(unique_id)
@@ -160,7 +160,7 @@ class LoginStatusClass(APIView):
                         
                 except Exception as e:
                     logging.error(f"LoginStatusClass : Execution Failed : Error : {str(e)}")
-                    return Response({"status_code":500,"error_msg":str(e)})
+                    return Response({"status_code":500,"response_msg":str(e)})
 
 class AdminRegestrationClass(APIView):
         
@@ -213,7 +213,7 @@ class AdminRegestrationClass(APIView):
                     
                 except Exception as e:
                     logging.error(f"AdminRegestrationClass : Execution Failed : Error : {str(e)}")
-                    return Response({"status_code":500,"error_msg":str(e)})
+                    return Response({"status_code":500,"response_msg":str(e)})
 
 class AdminLoginClass(APIView):
         
@@ -264,5 +264,5 @@ class AdminLoginClass(APIView):
                         
                 except Exception as e:
                     logging.error(f"AdminLoginClass : Execution Failed : Error : {str(e)}")
-                    return Response({"status_code":500,"error_msg":str(e)})
+                    return Response({"status_code":500,"response_msg":str(e)})
         

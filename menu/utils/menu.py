@@ -116,7 +116,7 @@ class MenuClass:
         connection,_ = self.get_db_connection()
             
         #? Checking if Some user exists with the same email address
-        sql_command = f"select c.category_id from feasta.category c where c.category_name  = '{category_name}'"
+        sql_command = f"select c.category_id from feasta.category c where c.category_name  = '{category_name}' and c.admin_id = '{admin_id}'"
         category_df = DB_OBJECT.select_records(connection, sql_command)
 
         if not isinstance(category_df, pd.DataFrame):
@@ -124,7 +124,7 @@ class MenuClass:
             
             logging.error(f"MenuClass : add_category : function failed : Got Nonetype from Category Name selection query")
             connection.close()
-            return 3
+            return 3, None
             
         elif len(category_df) == 0:
             #? No category with the same name
@@ -139,7 +139,7 @@ class MenuClass:
         else:
             logging.error(f"MenuClass : add_category : function failed : More than one categories with the same name exists")
             connection.close()
-            return 2
+            return 2, None
 
         connection.close()
         logging.info("MenuClass : add_category : execution stop")
