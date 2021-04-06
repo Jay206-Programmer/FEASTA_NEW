@@ -97,7 +97,7 @@ class AddItemClass(APIView):
             logging.info("AddItemClass : Execution Start")
             
             request_data = json.loads(request.body)
-            
+            print(request_data.keys())
             admin_id = request_data['admin_id']
             item_name = request_data['name']
             item_desc = request_data['desc']
@@ -107,7 +107,7 @@ class AddItemClass(APIView):
             image_path = "/"
             
             try:
-                image = request.FILES["image"]
+                print(request.FILES["image"].keys())
                 # print(image['name'])
                 # image_name = image['name'] + str(uuid.uuid1().int)
                 fd = open('%s/%s' % (".", "abcd"), 'wb')
