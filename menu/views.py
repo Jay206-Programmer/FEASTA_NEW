@@ -117,7 +117,7 @@ class AddItemClass(APIView):
             
             try:
                 image = request.FILES("image")
-                print(image.name, image.size)
+                print(image._get_name())
             except Exception as e:
                 logging.error(f"-------> {str(e)}")
             
