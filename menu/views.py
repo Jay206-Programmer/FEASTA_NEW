@@ -111,9 +111,14 @@ class AddItemClass(APIView):
             item_name = request_data['name']
             item_desc = request_data['desc']
             category_id = request_data['cate']
-            quantity = request_data['quan']
+            quantity = request_data['quant']
             price = request_data['price']
-            image_path = ''
+            try:
+                image = request_data['image']
+                print(image)
+            except:
+                pass
+            image_path = ""
             
             status, category_id = MENU_OBJ.add_item(admin_id, item_name, \
                                             item_desc, category_id, \
