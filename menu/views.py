@@ -96,14 +96,24 @@ class AddItemClass(APIView):
             logging.info("AddItemClass : Execution Start")
             
             #? Fatching parameters
-            admin_id = request.POST.get('admin_id')
-            item_name = request.POST.get('name')
-            item_desc = request.POST.get('desc')
-            category_id = request.POST.get('cate')
-            quantity = request.POST.get('quan')
-            price = request.POST.get('price')
+            # admin_id = request.POST.get('admin_id')
+            # item_name = request.POST.get('name')
+            # item_desc = request.POST.get('desc')
+            # category_id = request.POST.get('cate')
+            # quantity = request.POST.get('quan')
+            # price = request.POST.get('price')
+            # image_path = ''
+            # # print(request.File)
+            
+            request_data = json.loads(request.body)
+            
+            admin_id = request_data['admin_id']
+            item_name = request_data['name']
+            item_desc = request_data['desc']
+            category_id = request_data['cate']
+            quantity = request_data['quan']
+            price = request_data['price']
             image_path = ''
-            # print(request.File)
             
             status, category_id = MENU_OBJ.add_item(admin_id, item_name, \
                                             item_desc, category_id, \
