@@ -113,12 +113,14 @@ class AddItemClass(APIView):
             category_id = request_data['cate']
             quantity = request_data['quant']
             price = request_data['price']
-            try:
-                image = request_data['image']
-                print(str(image.keys()))
-            except Exception as e:
-                logging.error("----> "+f"{str(e)}")
             image_path = ""
+            
+            try:
+                image = request.FILES("image")
+                print(image.name, image.size)
+            except Exception as e:
+                logging.error(f"-------> {str(e)}")
+            
             
             status, category_id = MENU_OBJ.add_item(admin_id, item_name, \
                                             item_desc, category_id, \
@@ -128,7 +130,7 @@ class AddItemClass(APIView):
                 #? Item Addition Successful
                 
                 logging.info("AddItemClass : Execution End : Item Addition Successful")
-                return Response({"status_code":200,"response_msg":"Item Added Successfully", "category_id": f"{category_id}"})
+                return Response({"status_code":200,"response_msg":"Item Added Successfully", "item_id": f"{category_id}"})
             elif status == 1:
                 #? Item Addition Unsuccessful
                 
