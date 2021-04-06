@@ -107,7 +107,7 @@ class AddItemClass(APIView):
             image_path = "/"
             
             try:
-                image = request.FILES("image")
+                image = request.FILES["image"]
                 # print(image['name'])
                 # image_name = image['name'] + str(uuid.uuid1().int)
                 fd = open('%s/%s' % (".", "abcd"), 'wb')
