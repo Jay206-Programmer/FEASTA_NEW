@@ -2,6 +2,7 @@
 #* Importing Libraries
 import json
 import traceback
+import uuid
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
@@ -95,16 +96,6 @@ class AddItemClass(APIView):
         try:
             logging.info("AddItemClass : Execution Start")
             
-            #? Fatching parameters
-            # admin_id = request.POST.get('admin_id')
-            # item_name = request.POST.get('name')
-            # item_desc = request.POST.get('desc')
-            # category_id = request.POST.get('cate')
-            # quantity = request.POST.get('quan')
-            # price = request.POST.get('price')
-            # image_path = ''
-            # # print(request.File)
-            
             request_data = json.loads(request.body)
             
             admin_id = request_data['admin_id']
@@ -113,11 +104,16 @@ class AddItemClass(APIView):
             category_id = request_data['cate']
             quantity = request_data['quant']
             price = request_data['price']
-            image_path = ""
+            image_path = "/"
             
             try:
                 image = request.FILES("image")
                 print(image._get_name())
+                image_name = image._get_name() + str(uuid.uuid1().int)
+                fd = open('%s/%s' % (".", image_name), 'wb')
+                for chunk in image.chunks():
+                    fd.write(chunk)
+                fd.close()
             except Exception as e:
                 logging.error(f"-------> {str(e)}")
             
