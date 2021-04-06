@@ -109,6 +109,7 @@ class AddItemClass(APIView):
             try:
                 print(request.FILES.keys())
                 image = request_data['image']
+                print(image.keys())
                 try:
                     print("Bracket Way: "+image['name'])
                 except:
