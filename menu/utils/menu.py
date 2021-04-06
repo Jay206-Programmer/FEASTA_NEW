@@ -274,17 +274,12 @@ class MenuClass:
             #? Getting Database Connection
             connection,_ = self.get_db_connection()
             
-            if item_id == -1:
-                item_val = "c.category_id"
-            else:
-                item_val = "'"+str(item_id)+"'"
-            
             #? Getting Data from the database
             sql_command = f"""
             select m.item_id,m.item_name,m.item_desc,c.category_name,m.price,m.image_path 
             from feasta.menu m,feasta.category c 
             where c.admin_id = '{admin_id}' 
-            and m.category_id = {item_val} 
+            and m.category_id = c.category_id 
             order by m.item_name asc ;
             """
             logging.info(f"Get Item Sql Command -> {sql_command}")

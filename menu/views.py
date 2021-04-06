@@ -160,12 +160,9 @@ class GetItemDetailsClass(APIView):
             
             #? Fatching parameters
             admin_id = request.query_params.get('admin_id')
-            try:
-                item_id = request.query_params.get('item_id')
-            except:
-                item_id = -1
+            # item_id = request.query_params.get('item_id')
             
-            status, data = MENU_OBJ.get_item_details(admin_id,item_id)
+            status, data = MENU_OBJ.get_item_details(admin_id)
             
             if status == 0:
                 #? Successful Retrival
