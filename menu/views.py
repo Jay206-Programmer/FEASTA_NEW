@@ -115,7 +115,7 @@ class AddItemClass(APIView):
             price = request_data['price']
             try:
                 image = request_data['image']
-                print(type(image))
+                print(str(image.keys()))
             except Exception as e:
                 logging.error("----> "+f"{str(e)}")
             image_path = ""
