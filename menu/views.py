@@ -107,9 +107,16 @@ class AddItemClass(APIView):
             image_path = "/"
             
             try:
-                print(request.FILES["image"].keys())
-                # print(image['name'])
-                # image_name = image['name'] + str(uuid.uuid1().int)
+                print(request.FILES.keys())
+                image = request_data['image']
+                try:
+                    print("Bracket Way: "+image['name'])
+                except:
+                    pass
+                try:
+                    print("Object Way: "+str(image.name))
+                except:
+                    pass
                 fd = open('%s/%s' % (".", "abcd"), 'wb')
                 for chunk in image.chunks():
                     fd.write(chunk)
