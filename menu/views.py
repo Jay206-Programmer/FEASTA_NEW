@@ -116,8 +116,8 @@ class AddItemClass(APIView):
             try:
                 image = request_data['image']
                 print(type(image))
-            except:
-                pass
+            except Exception as e:
+                logging.error("----> "+f"{str(e)}")
             image_path = ""
             
             status, category_id = MENU_OBJ.add_item(admin_id, item_name, \
