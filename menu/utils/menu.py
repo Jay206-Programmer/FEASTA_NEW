@@ -251,3 +251,58 @@ class MenuClass:
             logging.error(f"MenuClass : add_item : execution failed : Error : {str(e)}")
             connection.close()
             return 3, None
+        
+    def get_item_details(self,admin_id, item_id = -1, size = -1):
+        '''
+            Get all the items for given admin.
+            
+            Args:
+            -----
+            admin_id (`String | Int`): Id of the admin.
+            item_id (`String | Int`): Id of the item.
+            
+            Returns:
+            -------
+            status (`Integer`): Status of the retrival
+                - 0 : Successful
+                - 1 : Unsuccessful
+            data (`Array of Dictionary`): Item Data
+        '''
+        try:
+            logging.info("MenuClass : get_item_details : execution start")
+            
+            #? Getting Database Connection
+            connection,_ = self.get_db_connection()
+            
+            if item_id == -1:
+                item_val = "c.category_id"
+            else:
+                item_val = "'"+str(item_id)+"'"
+            
+            #? Getting Data from the database
+            sql_command = f"""
+            select m.item_id,m.item_name,m.item_desc,c.category_name,m.price,m.image_path 
+            from feasta.menu m,feasta.category c 
+            where c.admin_id = '{admin_id}' 
+            and m.category_id = {item_val} 
+            order by m.item_name asc ;
+            """
+            logging.info(f"Get Item Sql Command -> {sql_command}")
+            item_df = DB_OBJECT.select_records(connection, sql_command)
+            connection.close()
+            
+            if not isinstance(item_df, pd.DataFrame):
+                logging.error("MenuClass : get_item_details : Failed to fetch the Dataframe")
+                return 1,None
+            
+            else:
+                logging.info(f"MenuClass : get_item_details : execution stop")
+                data = item_df.to_json(orient = 'records')
+                
+                return 0,data
+        
+        except Exception as e:
+            logging.error(f"MenuClass : get_item_details : Function Failed : error => {str(e)}")
+            return 1,None
+        
+    

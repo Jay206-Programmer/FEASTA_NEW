@@ -150,3 +150,31 @@ class AddItemClass(APIView):
         except Exception as e:
             logging.error(f"AddItemClass : Execution failed : Error => {str(e)}")
             return Response({"status_code":500,"response_msg":str(e)})
+
+class GetItemDetailsClass(APIView):
+    
+    def get(self, request, format = None):
+        
+        try:
+            logging.info("GetItemDetailsClass : Execution Start")
+            
+            #? Fatching parameters
+            admin_id = request.query_params.get('admin_id')
+            item_id = request.query_params.get('item_id')
+            
+            status, data = MENU_OBJ.get_item_details(admin_id,item_id)
+            
+            if status == 0:
+                #? Successful Retrival
+                
+                logging.info("GetItemDetailsClass : Execution End : Successful Retrival")
+                return Response({"status_code":200,"response_msg":"Successful Retrival", "data": json.loads(data)})
+            elif status == 1:
+                #? Retrival Unsuccessful
+                
+                logging.info("GetItemDetailsClass : Execution End : Retrival Unsuccessful")
+                return Response({"status_code":500,"response_msg":"Retrival Unsuccessful"})
+            
+        except Exception as e:
+            logging.error(f"GetItemDetailsClass : Execution failed : Error => {str(e)}")
+            return Response({"status_code":500,"response_msg":str(e)})
