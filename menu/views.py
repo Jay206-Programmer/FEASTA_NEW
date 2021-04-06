@@ -115,7 +115,7 @@ class AddItemClass(APIView):
             price = request_data['price']
             try:
                 image = request_data['image']
-                print(image)
+                print(type(image))
             except:
                 pass
             image_path = ""
