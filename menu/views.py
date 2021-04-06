@@ -108,9 +108,9 @@ class AddItemClass(APIView):
             
             try:
                 image = request.FILES("image")
-                print(image['name'])
-                image_name = image['name'] + str(uuid.uuid1().int)
-                fd = open('%s/%s' % (".", image_name), 'wb')
+                # print(image['name'])
+                # image_name = image['name'] + str(uuid.uuid1().int)
+                fd = open('%s/%s' % (".", "abcd"), 'wb')
                 for chunk in image.chunks():
                     fd.write(chunk)
                 fd.close()
