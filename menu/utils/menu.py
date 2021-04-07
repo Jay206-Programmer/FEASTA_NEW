@@ -347,13 +347,19 @@ class MenuClass:
             connection,_ = self.get_db_connection()
             
             #? Getting Data from the database
-            sql_command = f"""
-            select m.item_id,m.item_name,m.item_desc,c.category_name,m.price,m.image_path 
-            from feasta.menu m,feasta.category c 
-            where c.admin_id = '{admin_id}' 
-            and m.category_id = c.category_id 
-            order by m.item_name asc ;
-            """
+            if item_id == -1:
+                sql_command = f"""
+                select m.item_id,m.item_name,m.item_desc,c.category_name,m.price,m.image_path 
+                from feasta.menu m,feasta.category c 
+                where c.admin_id = '{admin_id}' 
+                and m.category_id = c.category_id 
+                order by m.item_name asc ;
+                """
+            else:
+                sql_command = f"""
+                select * from feasta.menu m where m.item_id = '{item_id}' 
+                """
+                
             logging.info(f"Get Item Sql Command -> {sql_command}")
             item_df = DB_OBJECT.select_records(connection, sql_command)
             connection.close()
