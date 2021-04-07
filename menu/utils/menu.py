@@ -191,16 +191,18 @@ class MenuClass:
             logging.error(f"MenuClass : get_category_details : Function Failed : error => {str(e)}")
             return 1,None
         
-    def add_item(self, admin_id, item_name, item_desc, category_id, price, image_path):
+    def add_item(self, admin_id, item_name, item_desc, category_id, price,quantity , image_path):
         '''
             To add Item to the database.
             
             Args:
             ----
+            admin_id (`String`): Id of the admin.
             item_name (`String`): Name of the item.
             item_desc (`String`): Description of the item.
             category_id (`String | Int`): Id of the category
             price (`String | Int`): Price of the product.
+            quantity (`String | Int`): Quantity of the product.
             image_path (`String`): Path where the image is stored.
             
             Returns:
@@ -230,9 +232,9 @@ class MenuClass:
                 #? No item with the same name
                     
                 #? Building data for insertion
-                data = [(item_name,item_desc,category_id,price,image_path)]
+                data = [(item_name,item_desc,category_id,price,quantity,image_path)]
                 table_name = "feasta.menu"
-                cols = "item_name,item_desc,category_id,price,image_path"
+                cols = "item_name,item_desc,category_id,price,quantity,image_path"
                 
                 #? Inserting data
                 status,index = DB_OBJECT.insert_records(connection, table_name, data, cols, index= 'item_id',Flag=1)
@@ -251,7 +253,77 @@ class MenuClass:
             logging.error(f"MenuClass : add_item : execution failed : Error : {str(e)}")
             connection.close()
             return 3, None
+    
+    def update_item(self, admin_id, item_id, item_name, item_desc, category_id, price,quantity , image_path):
+        '''
+            To add Item to the database.
+            
+            Args:
+            ----
+            admin_id (`String`): Id of the admin.
+            item_id (`String`): Id of the item.
+            item_name (`String`): Name of the item.
+            item_desc (`String`): Description of the item.
+            category_id (`String | Int`): Id of the category
+            price (`String | Int`): Price of the product.
+            quantity (`String | Int`): Quantity of the product.
+            image_path (`String`): Path where the image is stored.
+            
+            Returns:
+            -------
+            status (`Integer`): Status of the insertion.
+            item_id (`Integer`): Index of the entry in the category table.
+        '''
+
+        try:
+            logging.info("MenuClass : update_item : execution start")
+
+            #? Getting Database Connection
+            connection,_ = self.get_db_connection()
+                
+            #? Checking if Some item exists with the name for same admin
+            sql_command = f"select count(*) from feasta.menu m,feasta.category c where c.admin_id = '{str(admin_id)}' and m.category_id = c.category_id and m.item_name = '{item_name}'"
+            item_name_df = DB_OBJECT.select_records(connection, sql_command)
+
+            if not isinstance(item_name_df, pd.DataFrame):
+                #? Function failed to select
+                
+                connection.close()
+                logging.error(f"MenuClass : update_item : function failed : Got Nonetype from Category Name selection query")
+                return 3, None
+                
+            elif int(item_name_df['count'][0]) == 0:
+                #? No item with the same name
+                    
+                sql_command = f"""
+                update feasta.menu set 
+                item_name = '{item_name}',
+                item_desc = '{item_desc}',
+                category_id = '{str(category_id)}',
+                price = {str(price)},
+                quantity = '{str(quantity)}',
+                image_path = '{image_path}'
+                where item_id = '{item_id}'
+                """
+                logging.info(f"Sql Command for Update => {sql_command}")
+                #? Inserting data
+                status = DB_OBJECT.update_records(connection, sql_command)
+                connection.close()
+                
+            else:
+                logging.error(f"MenuClass : update_item : function failed : More than one items with the same name exists")
+                connection.close()
+                return 2, None
+
+            logging.info("MenuClass : update_item : execution stop")
+
+            return  status,item_id
         
+        except Exception as e:
+            logging.error(f"MenuClass : update_item : execution failed : Error : {str(e)}")
+            connection.close()
+            return 3, None
+    
     def get_item_details(self,admin_id, item_id = -1, size = -1):
         '''
             Get all the items for given admin.
@@ -300,4 +372,63 @@ class MenuClass:
             logging.error(f"MenuClass : get_item_details : Function Failed : error => {str(e)}")
             return 1,None
         
-    
+    def delete_item(self, admin_id, item_id):
+        '''
+            Used to delete Item from table.
+            
+            Args:
+            -----
+            admin_id (`String | Int`): Id of the admin.
+            item_id (`String | Int`): Id of the item.
+            
+            Returns:
+            -------
+            status (`Integer`): Status of the deletion
+                - 0 : Successful
+                - 1 : Unsuccessful
+            data (`Array of Dictionary`): Updated Data.
+        '''
+        try:
+            logging.info("MenuClass : delete_item : execution start")
+            
+            #? Getting Database Connection
+            connection,_ = self.get_db_connection()
+            
+            #? Getting Data from the database
+            sql_command = f"""
+            delete from feasta.menu where item_id = '{item_id}'
+            """
+            status = DB_OBJECT.delete_records(connection, sql_command)
+            
+            if status == 1:
+                connection.close()
+                logging.info("MenuClass : delete_item : Deletion Failed")
+                return 1,None
+            
+            logging.info("MenuClass : delete_item : Deletion Successful")
+                
+            #? Getting Data from the database
+            sql_command = f"""
+            select m.item_id,m.item_name,m.item_desc,c.category_name,m.price,m.image_path 
+            from feasta.menu m,feasta.category c 
+            where c.admin_id = '{admin_id}' 
+            and m.category_id = c.category_id 
+            order by m.item_name asc ;
+            """
+            item_df = DB_OBJECT.select_records(connection, sql_command)
+            connection.close()
+            
+            if not isinstance(item_df, pd.DataFrame):
+                logging.error("MenuClass : delete_item : Failed to fetch the Dataframe")
+                return 1,None
+            
+            else:
+                logging.info(f"MenuClass : delete_item : execution stop")
+                data = item_df.to_json(orient = 'records')
+                
+                return 0,data
+        
+        except Exception as e:
+            logging.error(f"MenuClass : delete_item : Function Failed : error => {str(e)}")
+            return 1,None
+        

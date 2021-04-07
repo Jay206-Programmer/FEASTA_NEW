@@ -128,7 +128,8 @@ class AddItemClass(APIView):
             
             status, category_id = MENU_OBJ.add_item(admin_id, item_name, \
                                             item_desc, category_id, \
-                                            price, image_path)
+                                            price, quantity, \
+                                            image_path)
             
             if status == 0:
                 #? Item Addition Successful
@@ -145,6 +146,53 @@ class AddItemClass(APIView):
                 
                 logging.info("AddItemClass : Execution End : Multiple items with same name")
                 return Response({"status_code":500,"response_msg":"Multiple items with same name, choose a different name."})
+            else:
+                #? Unknown Error
+                
+                logging.info("AddItemClass : Execution End : Unknown Error")
+                return Response({"status_code":500,"response_msg":"Unknown Error Occurred, Please Retry!"})
+            
+        except Exception as e:
+            logging.error(f"AddItemClass : Execution failed : Error => {str(e)}")
+            return Response({"status_code":500,"response_msg":str(e)})
+
+    def put(self, request, format = None):
+        
+        try:
+            logging.info("AddItemClass : Execution Start")
+            
+            request_data = json.loads(request.body)
+            print(request_data.keys())
+            admin_id = request_data['admin_id']
+            item_id = request_data['item_id']
+            item_name = request_data['name']
+            item_desc = request_data['desc']
+            category_id = request_data['cate']
+            quantity = request_data['quant']
+            price = request_data['price']
+            image_path = "/"
+            
+            status, item_id = MENU_OBJ.update_item(admin_id, item_id, \
+                                            item_name, item_desc, \
+                                            category_id, price, \
+                                            quantity, image_path \
+                                            )
+            
+            if status == 0:
+                #? Item Updation Successful
+                
+                logging.info("AddItemClass : Execution End : Item Updation Successful")
+                return Response({"status_code":200,"response_msg":"Item Updation Successful", "item_id": f"{item_id}"})
+            elif status == 1:
+                #? Item Updation Unsuccessful
+                
+                logging.info("AddItemClass : Execution End : Item Updation Unsuccessful")
+                return Response({"status_code":500,"response_msg":"Item Updation Unsuccessful, Please Retry!"})
+            elif status == 2:
+                #? Multiple Items with same name
+                
+                logging.info("AddItemClass : Execution End : Multiple items with same name")
+                return Response({"status_code":500,"response_msg":"There already exists an item with this name, choose a different one."})
             else:
                 #? Unknown Error
                 
@@ -182,3 +230,30 @@ class GetItemDetailsClass(APIView):
         except Exception as e:
             logging.error(f"GetItemDetailsClass : Execution failed : Error => {str(e)}")
             return Response({"status_code":500,"response_msg":str(e)})
+        
+    def delete(self, request, format = None):
+        
+        try:
+            logging.info("GetItemDetailsClass : Execution Start")
+            
+            #? Fatching parameters
+            admin_id = request.query_params.get('admin_id')
+            item_id = request.query_params.get('item_id')
+            
+            status, data = MENU_OBJ.delete_item(admin_id,item_id)
+            
+            if status == 0:
+                #? Successful Deletion
+                
+                logging.info("GetItemDetailsClass : Execution End : Successful Deletion")
+                return Response({"status_code":200,"response_msg":"Successfully Deleted the item", "data": json.loads(data)})
+            elif status == 1:
+                #? Retrival Unsuccessful
+                
+                logging.info("GetItemDetailsClass : Execution End : Deletion Unsuccessful")
+                return Response({"status_code":500,"response_msg":"Deletion Unsuccessful"})
+            
+        except Exception as e:
+            logging.error(f"GetItemDetailsClass : Execution failed : Error => {str(e)}")
+            return Response({"status_code":500,"response_msg":str(e)})
+        
