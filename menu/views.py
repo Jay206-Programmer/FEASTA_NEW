@@ -239,11 +239,11 @@ class GetItemDetailsClass(APIView):
             #? Fatching parameters
             admin_id = request.query_params.get('admin_id')
             try:
-                item_id = request.query_params.get('item_id')
+                item_id = int(request.query_params.get('item_id'))
             except:
                 item_id = None
             try:
-                category_id = request.query_params.get('category_id')
+                category_id = int(request.query_params.get('category_id'))
             except:
                 category_id = None
             

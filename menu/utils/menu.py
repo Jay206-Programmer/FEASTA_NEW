@@ -360,13 +360,13 @@ class MenuClass:
             elif category_id == -1:
                 #? User need list for specific item
                 sql_command = f"""
-                select * from feasta.menu m where m.item_id = '{item_id}' 
+                select * from feasta.menu m where m.item_id = '{str(item_id)}' 
                 """
                 
             else:
                 #? User needs items of specific category
                 sql_command = f"""
-                select * from feasta.menu m where m.category_id = '{category_id}' 
+                select * from feasta.menu m where m.category_id = '{str(category_id)}' 
                 """
                 
             logging.info(f"Get Item Sql Command -> {sql_command}")
