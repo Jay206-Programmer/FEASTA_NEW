@@ -3,7 +3,10 @@ from .views import *
 
 urlpatterns = [
     
-    #URL For User Login
-    # path('auth/login/',UserLoginClass.as_view()),
-    # path('auth/regestration/',UserRegestrationClass.as_view()),
+    path('menu/add_category/',AddCategoryClass.as_view()),
+    path('menu/get_category/',GetCategoryDetailsClass.as_view()),
+    path('menu/add_item/',AddItemClass.as_view()),
+    path('menu/update_item/',UpdateItem.as_view()),
+    path('menu/get_item/',GetItemDetailsClass.as_view()),
+    
 ]

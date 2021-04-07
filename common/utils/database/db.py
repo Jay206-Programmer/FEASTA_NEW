@@ -147,6 +147,7 @@ class DBClass:
         try:
             cursor.execute('CREATE Schema '+ schema_name +';') # Excute create schema query.
             connection.commit() # Commit the changes.
+            cursor.close()
             return 0 # If successfully created.
         except (Exception, psycopg2.DatabaseError) as error:
             connection.rollback() # Rollback the changes.
@@ -168,6 +169,7 @@ class DBClass:
         try:
             cursor.execute('CREATE TABLE '+table_name+' ('+schema+');') # Excute create table query.
             connection.commit() # Commit the changes.
+            cursor.close()
             return 0 # If successfully created.
         except (Exception, psycopg2.DatabaseError) as error:
             logging.info(str(error))
@@ -175,7 +177,7 @@ class DBClass:
             cursor.close() # Close the cursor
             return 1 # If failed.
         
-    def insert_records(self,connection,table_name,row_tuples,cols,Flag=0):
+    def insert_records(self,connection,table_name,row_tuples,cols,index ='index',Flag=0):
         """This function is used to insert data into database table.
 
         Args:
@@ -201,7 +203,7 @@ class DBClass:
                 extras.execute_values(cursor, query, tuples) # Excute insert query.
                 index = 0
             else:
-                query = "INSERT INTO %s(%s) VALUES %%s RETURNING index" % (table_name, cols) # Make query
+                query = "INSERT INTO %s(%s) VALUES %%s RETURNING %s" % (table_name, cols, index) # Make query
                 extras.execute_values(cursor, query, tuples) # Excute insert query.
                 index = [row[0] for row in cursor.fetchall()][0]
             
@@ -231,7 +233,7 @@ class DBClass:
             connection_string = "postgresql://" + user + ":" + password + "@" + host + ":" + port + "/" + database # Make database connection string.
             engine = create_engine(connection_string) # Create database engine.
             data = pd.read_sql_query(sql_command, engine) #method of sqlalchemy
-    
+            engine.dispose()
             return data   
         except(Exception, psycopg2.DatabaseError) as error:
             logging.info(str(error) + "check")
@@ -255,6 +257,7 @@ class DBClass:
         try:
             cursor.execute(sql_command) # Execute the delete query.
             connection.commit() # Commit the changes.
+            cursor.close()
             status = 0 # If Successfully.
         except (Exception, psycopg2.DatabaseError) as error:
             connection.rollback() # Rollback the changes.
@@ -308,7 +311,7 @@ class DBClass:
         try :
             
             file_data_df.to_sql(table_name,engine,schema=schema_name,) # Load data into database with table structure.
-            
+            engine.dispose()
             status = 0 # If successfully.
         except Exception as e:
             logging.error("Exception: "+str(e))
