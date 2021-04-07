@@ -96,29 +96,18 @@ class AddItemClass(APIView):
         try:
             logging.info("AddItemClass : Execution Start")
             
-            request_data = json.loads(request.body)
-            print(request_data.keys())
-            admin_id = request_data['admin_id']
-            item_name = request_data['name']
-            item_desc = request_data['desc']
-            category_id = request_data['cate']
-            quantity = request_data['quant']
-            price = request_data['price']
+            admin_id = request.POST.get('admin_id')
+            item_name = request.POST.get('name')
+            item_desc = request.POST.get('desc')
+            category_id = request.POST.get('cate')
+            quantity = request.POST.get('quant')
+            price = request.POST.get('price')
             image_path = "/"
             
             try:
-                print(request.FILES.keys())
-                image = request_data['image']
-                print(dir(image))
-                try:
-                    print("Bracket Way: "+image['name'])
-                except:
-                    pass
-                try:
-                    print("Object Way: "+str(image.name))
-                except:
-                    pass
-                fd = open('%s/%s' % (".", "abcd"), 'wb')
+                image = request.FILES['image']
+                print(image.name)
+                fd = open('%s/%s' % (".", image.name), 'wb')
                 for chunk in image.chunks():
                     fd.write(chunk)
                 fd.close()
@@ -161,15 +150,13 @@ class AddItemClass(APIView):
         try:
             logging.info("AddItemClass : Execution Start")
             
-            request_data = json.loads(request.body)
-            print(request_data.keys())
-            admin_id = request_data['admin_id']
-            item_id = request_data['item_id']
-            item_name = request_data['name']
-            item_desc = request_data['desc']
-            category_id = request_data['cate']
-            quantity = request_data['quant']
-            price = request_data['price']
+            admin_id = request.POST.get('admin_id')
+            item_id = request.POST.get('item_id')
+            item_name = request.POST.get('name')
+            item_desc = request.POST.get('desc')
+            category_id = request.POST.get('cate')
+            quantity = request.POST.get('quant')
+            price = request.POST.get('price')
             image_path = "/"
             
             status, item_id = MENU_OBJ.update_item(admin_id, item_id, \
