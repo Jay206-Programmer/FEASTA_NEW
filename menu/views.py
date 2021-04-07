@@ -142,13 +142,13 @@ class AddItemClass(APIView):
         try:
             logging.info("AddItemClass : Execution Start")
             
-            admin_id = request.POST.get('admin_id')
-            item_id = request.POST.get('item_id')
-            item_name = request.POST.get('name')
-            item_desc = request.POST.get('desc')
-            category_id = request.POST.get('cate')
-            quantity = request.POST.get('quant')
-            price = request.POST.get('price')
+            admin_id = request.PUT.get('admin_id')
+            item_id = request.PUT.get('item_id')
+            item_name = request.PUT.get('item_name')
+            item_desc = request.PUT.get('item_desc')
+            category_id = request.PUT.get('category_id')
+            quantity = request.PUT.get('quantity')
+            price = request.PUT.get('price')
             image_path = "/"
             
             status, item_id = MENU_OBJ.update_item(admin_id, item_id, \
