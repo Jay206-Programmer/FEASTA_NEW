@@ -104,16 +104,8 @@ class AddItemClass(APIView):
             price = request.POST.get('price')
             image_path = "/"
             
-            try:
-                image = request.FILES['image']
-                print(image.name)
-                fd = open('%s/%s' % (".", image.name), 'wb')
-                for chunk in image.chunks():
-                    fd.write(chunk)
-                fd.close()
-            except Exception as e:
-                logging.error(f"-------> {str(e)}")
-            
+            image = request.FILES['image']
+                
             
             status, category_id = MENU_OBJ.add_item(admin_id, item_name, \
                                             item_desc, category_id, \
