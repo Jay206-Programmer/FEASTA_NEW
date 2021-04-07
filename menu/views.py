@@ -199,7 +199,7 @@ class GetItemDetailsClass(APIView):
             if item_id is None:
                 status, data = MENU_OBJ.get_item_details(admin_id)
             else:
-                status, data = MENU_OBJ.get_item_details(admin_id)
+                status, data = MENU_OBJ.get_item_details(admin_id,item_id)
             
             if status == 0:
                 #? Successful Retrival
