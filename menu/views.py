@@ -137,18 +137,65 @@ class AddItemClass(APIView):
             logging.error(f"AddItemClass : Execution failed : Error => {str(e)}")
             return Response({"status_code":500,"response_msg":str(e)})
 
-    def put(self, request, format = None):
+    # def put(self, request, format = None):
+        
+    #     try:
+    #         logging.info("AddItemClass : Execution Start")
+            
+    #         admin_id = request.PUT.get('admin_id')
+    #         item_id = request.PUT.get('item_id')
+    #         item_name = request.PUT.get('item_name')
+    #         item_desc = request.PUT.get('item_desc')
+    #         category_id = request.PUT.get('category_id')
+    #         quantity = request.PUT.get('quantity')
+    #         price = request.PUT.get('price')
+    #         image_path = "/"
+            
+    #         status, item_id = MENU_OBJ.update_item(admin_id, item_id, \
+    #                                         item_name, item_desc, \
+    #                                         category_id, price, \
+    #                                         quantity, image_path \
+    #                                         )
+            
+    #         if status == 0:
+    #             #? Item Updation Successful
+                
+    #             logging.info("AddItemClass : Execution End : Item Updation Successful")
+    #             return Response({"status_code":200,"response_msg":"Item Updation Successful", "item_id": f"{item_id}"})
+    #         elif status == 1:
+    #             #? Item Updation Unsuccessful
+                
+    #             logging.info("AddItemClass : Execution End : Item Updation Unsuccessful")
+    #             return Response({"status_code":500,"response_msg":"Item Updation Unsuccessful, Please Retry!"})
+    #         elif status == 2:
+    #             #? Multiple Items with same name
+                
+    #             logging.info("AddItemClass : Execution End : Multiple items with same name")
+    #             return Response({"status_code":500,"response_msg":"There already exists an item with this name, choose a different one."})
+    #         else:
+    #             #? Unknown Error
+                
+    #             logging.info("AddItemClass : Execution End : Unknown Error")
+    #             return Response({"status_code":500,"response_msg":"Unknown Error Occurred, Please Retry!"})
+            
+    #     except Exception as e:
+    #         logging.error(f"AddItemClass : Execution failed : Error => {str(e)}")
+    #         return Response({"status_code":500,"response_msg":str(e)})
+
+class UpdateItem(APIView):
+
+    def post(self, request, format = None):
         
         try:
             logging.info("AddItemClass : Execution Start")
             
-            admin_id = request.PUT.get('admin_id')
-            item_id = request.PUT.get('item_id')
-            item_name = request.PUT.get('item_name')
-            item_desc = request.PUT.get('item_desc')
-            category_id = request.PUT.get('category_id')
-            quantity = request.PUT.get('quantity')
-            price = request.PUT.get('price')
+            admin_id = request.POST.get('admin_id')
+            item_id = request.POST.get('item_id')
+            item_name = request.POST.get('item_name')
+            item_desc = request.POST.get('item_desc')
+            category_id = request.POST.get('category_id')
+            quantity = request.POST.get('quantity')
+            price = request.POST.get('price')
             image_path = "/"
             
             status, item_id = MENU_OBJ.update_item(admin_id, item_id, \
