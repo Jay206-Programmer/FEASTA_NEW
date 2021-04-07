@@ -241,18 +241,13 @@ class GetItemDetailsClass(APIView):
             try:
                 item_id = int(request.query_params.get('item_id'))
             except:
-                item_id = None
+                item_id = -1
             try:
                 category_id = int(request.query_params.get('category_id'))
             except:
-                category_id = None
+                category_id = -1
             
-            if item_id is None and category_id is None:
-                status, data = MENU_OBJ.get_item_details(admin_id)
-            elif item_id is None:
-                status, data = MENU_OBJ.get_item_details(admin_id,category_id)
-            else:
-                status, data = MENU_OBJ.get_item_details(admin_id,item_id,category_id)
+            status, data = MENU_OBJ.get_item_details(admin_id,item_id,category_id)
             
             if status == 0:
                 #? Successful Retrival
