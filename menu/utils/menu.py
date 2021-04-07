@@ -324,7 +324,7 @@ class MenuClass:
             connection.close()
             return 3, None
     
-    def get_item_details(self,admin_id, item_id = -1, size = -1):
+    def get_item_details(self,admin_id, item_id = -1, category_id = -1):
         '''
             Get all the items for given admin.
             
@@ -332,6 +332,7 @@ class MenuClass:
             -----
             admin_id (`String | Int`): Id of the admin.
             item_id (`String | Int`): Id of the item.
+            category_id (`String | Int`): Id of the category.
             
             Returns:
             -------
@@ -347,7 +348,8 @@ class MenuClass:
             connection,_ = self.get_db_connection()
             
             #? Getting Data from the database
-            if item_id == -1:
+            if item_id == -1 and category_id == -1:
+                #? User Need all items
                 sql_command = f"""
                 select m.item_id,m.item_name,m.item_desc,c.category_name,m.price,m.image_path 
                 from feasta.menu m,feasta.category c 
@@ -355,9 +357,16 @@ class MenuClass:
                 and m.category_id = c.category_id 
                 order by m.item_name asc ;
                 """
-            else:
+            elif category_id == -1:
+                #? User need list for specific item
                 sql_command = f"""
                 select * from feasta.menu m where m.item_id = '{item_id}' 
+                """
+                
+            else:
+                #? User needs items of specific category
+                sql_command = f"""
+                select * from feasta.menu m where m.category_id = '{category_id}' 
                 """
                 
             logging.info(f"Get Item Sql Command -> {sql_command}")
