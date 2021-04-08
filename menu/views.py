@@ -5,17 +5,18 @@ import traceback
 import uuid
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import HttpResponse
 
 #* Relative Imports
 from .utils import menu
 
 #* Initializing Logs
 from common.utils.logging.logger import *
-logger = LogClass().get_logger('menu_views')
+from common.utils.Deployment.aws import ImageClass
 
 #* Defining Class Objects
 MENU_OBJ = menu.MenuClass()
+logger = LogClass().get_logger('menu_views')
+AWS_IMG_OBJ = ImageClass()
 
 class AddCategoryClass(APIView):
     
@@ -102,11 +103,15 @@ class AddItemClass(APIView):
             category_id = request.POST.get('cate')
             quantity = request.POST.get('quant')
             price = request.POST.get('price')
-            image_path = "/"
             
             image = request.FILES['image']
-                
             
+            image_path = AWS_IMG_OBJ.upload_image(image)
+            
+            if image_path == False:
+                logging.info("AddItemClass : Execution End : Image Upload Unsuccessful")
+                return Response({"status_code":500,"response_msg":"Item Upload Unsuccessful, Please Retry!"})
+                
             status, category_id = MENU_OBJ.add_item(admin_id, item_name, \
                                             item_desc, category_id, \
                                             price, quantity, \
