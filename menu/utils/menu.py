@@ -347,28 +347,28 @@ class MenuClass:
             #? Getting Database Connection
             connection,_ = self.get_db_connection()
             
-            #? Getting Data from the database
-            if item_id == -1 and category_id == -1:
-                #? User Need all items
-                sql_command = f"""
-                select m.item_id,m.item_name,m.item_desc,c.category_name,m.price,m.image_path 
-                from feasta.menu m,feasta.category c 
-                where c.admin_id = '{admin_id}' 
-                and m.category_id = c.category_id 
-                order by m.item_name asc ;
-                """
-            elif category_id == -1:
+            if item_id != -1:
                 #? User need list for specific item
                 sql_command = f"""
                 select * from feasta.menu m where m.item_id = '{str(item_id)}' 
                 """
                 
-            else:
+            elif category_id != -1:
                 #? User needs items of specific category
                 sql_command = f"""
                 select * from feasta.menu m where m.category_id = '{str(category_id)}' 
                 """
                 
+            #? Getting Data from the database
+            else:
+                #? User Need all items
+                sql_command = f"""
+                select m.item_id,m.item_name,m.item_desc,c.category_id,c.category_name,m.price,m.image_path 
+                from feasta.menu m,feasta.category c 
+                where c.admin_id = '{admin_id}' 
+                and m.category_id = c.category_id 
+                order by m.item_name asc ;
+                """
             logging.info(f"Get Item Sql Command -> {sql_command}")
             item_df = DB_OBJECT.select_records(connection, sql_command)
             connection.close()

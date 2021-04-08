@@ -106,10 +106,6 @@ class AddItemClass(APIView):
             
             image = request.FILES['image']
             
-            try:
-                print(image['type'])
-            except:
-                pass
             image_path = AWS_IMG_OBJ.upload_image(image)
             
             if image_path == False:

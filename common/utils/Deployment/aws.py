@@ -36,7 +36,8 @@ class ImageClass:
             Bucket=bucket,
             Key=s3_key,
             Body=file,
-            ACL='public-read'
+            ACL='public-read',
+            ContentType = 'image/jpeg'
         )
         
         if result['ResponseMetadata']['HTTPStatusCode'] == 200:
