@@ -17,7 +17,11 @@ class ImageClass:
             ----
             file (`File`): File Object.
             bucket (`String`): Name of the s3 bucket.
-            namespace (`String`): 
+            namespace (`String`): Name of the folder.
+            
+            Returns:
+            -------
+            image_path (`String | Boolean(False)`) : Url of the image.
         '''
 
         s3 = boto3.client("s3")
