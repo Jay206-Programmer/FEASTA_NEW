@@ -26,9 +26,9 @@ class ImageClass:
 
         s3 = boto3.client("s3")
         
-        name,extention = str(file.name).split('.')
+        name_array = str(file.name).split('.')
         
-        name = str(name) + '_' + str(uuid.uuid1().int)[-5:] + '.' + str(extention)
+        name = str(uuid.uuid1().int)[-8:] + '.' + str(name_array[-1])
         s3_key = '{0}/{1}'.format(namespace, name)
 
         # Send the file

@@ -201,7 +201,9 @@ class UpdateItem(APIView):
             category_id = request.POST.get('category_id')
             quantity = request.POST.get('quantity')
             price = request.POST.get('price')
-            image_path = "/"
+            
+            image = request.FILES['image']
+            image_path = AWS_IMG_OBJ.upload_image(image)
             
             status, item_id = MENU_OBJ.update_item(admin_id, item_id, \
                                             item_name, item_desc, \
