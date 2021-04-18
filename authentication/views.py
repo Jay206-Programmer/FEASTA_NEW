@@ -5,6 +5,7 @@ import traceback
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
+from django.shortcuts import redirect
 
 #* Relative Imports
 from .utils import authentication as auth
@@ -123,12 +124,11 @@ class UserRegestrationClass(APIView):
         
 def verify_user(request, unique_id):
     message = AUTH_OBJECT.verify_uniqueid(CONNECTION,unique_id)
-    return HttpResponse(message, content_type='text/html')
+    return redirect("https://feasta-admin-app.vercel.app/login")
 
 def verify_admin(request, unique_id):
     message = AUTH_OBJECT.verify_uniqueid(CONNECTION,unique_id,flag = 1)
-    return HttpResponse(message, content_type='text/html')
-
+    return redirect("https://feasta-admin-app.vercel.app/login")
 class LoginStatusClass(APIView):
         
         def post(self,request,format=None):
