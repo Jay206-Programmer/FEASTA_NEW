@@ -17,6 +17,7 @@ from common.utils.Deployment.aws import ImageClass
 MENU_OBJ = menu.MenuClass()
 logger = LogClass().get_logger('menu_views')
 AWS_IMG_OBJ = ImageClass()
+CONNECTION,CONNECTION_URL = MENU_OBJ.get_db_connection()
 
 class AddCategoryClass(APIView):
     
@@ -34,7 +35,7 @@ class AddCategoryClass(APIView):
             category_desc = ''
             image_path = ''
             
-            status, category_id = MENU_OBJ.add_category(admin_id, category_name, \
+            status, category_id = MENU_OBJ.add_category(CONNECTION, admin_id, category_name, \
                                             category_desc, image_path \
                                             )
             
@@ -73,7 +74,7 @@ class GetCategoryDetailsClass(APIView):
             #? Fatching parameters
             admin_id = request.query_params.get('admin_id')
             
-            status, data = MENU_OBJ.get_category_details(admin_id)
+            status, data = MENU_OBJ.get_category_details(CONNECTION, admin_id)
             
             if status == 0:
                 #? Successful Retrival
@@ -112,7 +113,7 @@ class AddItemClass(APIView):
                 logging.info("AddItemClass : Execution End : Image Upload Unsuccessful")
                 return Response({"status_code":500,"response_msg":"Item Upload Unsuccessful, Please Retry!"})
                 
-            status, category_id = MENU_OBJ.add_item(admin_id, item_name, \
+            status, category_id = MENU_OBJ.add_item(CONNECTION, admin_id, item_name, \
                                             item_desc, category_id, \
                                             price, quantity, \
                                             image_path)
@@ -156,7 +157,7 @@ class AddItemClass(APIView):
     #         price = request.PUT.get('price')
     #         image_path = "/"
             
-    #         status, item_id = MENU_OBJ.update_item(admin_id, item_id, \
+    #         status, item_id = MENU_OBJ.update_item(CONNECTION, admin_id, item_id, \
     #                                         item_name, item_desc, \
     #                                         category_id, price, \
     #                                         quantity, image_path \
@@ -205,7 +206,7 @@ class UpdateItem(APIView):
             image = request.FILES['image']
             image_path = AWS_IMG_OBJ.upload_image(image)
             
-            status, item_id = MENU_OBJ.update_item(admin_id, item_id, \
+            status, item_id = MENU_OBJ.update_item(CONNECTION, admin_id, item_id, \
                                             item_name, item_desc, \
                                             category_id, price, \
                                             quantity, image_path \
@@ -254,7 +255,7 @@ class GetItemDetailsClass(APIView):
             except:
                 category_id = -1
             
-            status, data = MENU_OBJ.get_item_details(admin_id,item_id,category_id)
+            status, data = MENU_OBJ.get_item_details(CONNECTION, admin_id,item_id,category_id)
             
             if status == 0:
                 #? Successful Retrival
@@ -280,7 +281,7 @@ class GetItemDetailsClass(APIView):
             admin_id = request.query_params.get('admin_id')
             item_id = request.query_params.get('item_id')
             
-            status, data = MENU_OBJ.delete_item(admin_id,item_id)
+            status, data = MENU_OBJ.delete_item(CONNECTION, admin_id,item_id)
             
             if status == 0:
                 #? Successful Deletion

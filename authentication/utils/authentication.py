@@ -42,7 +42,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
         logging.info("AuthenticationClass : get_db_connection : function called")
         return DB_OBJECT.database_connection()
     
-    def register_user(self, first_name, last_name, password, email, mobile_number):
+    def register_user(self, connection, first_name, last_name, password, email, mobile_number):
         '''
             For user regestration.
             
@@ -66,16 +66,13 @@ class AuthenticationClass(UsersClass,AdminsClass):
         logging.info("AuthenticationClass : register_user : execution start")
         
         try:
-            #? Getting Database Connection
-            connection,_ = self.get_db_connection()
-            
             #? Checking if Some user exists with the same email address
             sql_command = f"select u.password from feasta.users u where email_id = '{email}'"
             password_df = DB_OBJECT.select_records(connection, sql_command)
             
             if not isinstance(password_df, pd.DataFrame):
                 #! Function failed to select
-                connection.close()
+                #connection.close()
                 logging.error(f"AuthenticationClass : register_user : function failed : Got Nonetype from Email selection query")
                 return 3
             
@@ -112,18 +109,18 @@ class AuthenticationClass(UsersClass,AdminsClass):
                     t1.start()
             else:
                 #? User exists with the same email
-                connection.close()
+                #connection.close()
                 logging.error(f"AuthenticationClass : register_user : execution stop : User Exists with the same Email")
                 return 2
             
             logging.info(f"AuthenticationClass : register_user : execution stop : status = {str(status)}")
             
-            connection.close()
+            #connection.close()
             return status
         
         except Exception as e:
             
-            connection.close()
+            #connection.close()
             logging.info(f"AuthenticationClass : register_user : Function Failed : {str(e)}")
             return 3
     
@@ -143,7 +140,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
         email.send()
         return 0
 
-    def login_user(self, email, password):
+    def login_user(self, connection, email, password):
         '''
             For user regestration.
             
@@ -161,25 +158,23 @@ class AuthenticationClass(UsersClass,AdminsClass):
         try:
             logging.info("AuthenticationClass : login_user : execution start")
             
-            connection,_ = self.get_db_connection()
-            
             sql_command = f"select u.user_id,u.password,u.verification_status from feasta.users u where email_id = '{email}'"
             password_df = DB_OBJECT.select_records(connection, sql_command)
             
             if not isinstance(password_df, pd.DataFrame):
                     #? Function failed to select
                     
-                    connection.close()
+                    #connection.close()
                     logging.error(f"AuthenticationClass : login_user : function failed : Got Nonetype from Email selection query")
                     return 3,None
                 
             elif len(password_df) == 0:
-                connection.close()
+                #connection.close()
                 return 5,None
             
             elif int(password_df['verification_status']) == 0:
                 logging.info("AuthenticationClass : login_user : execution stop : Email Verification Remaining")
-                connection.close()
+                #connection.close()
                 return 4,None
 
             original_password = str(password_df['password'][0])
@@ -189,7 +184,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
 
             if isinstance(user_dict, str):
                 #? Failed to fetch user details
-                connection.close()
+                #connection.close()
                 return 3,None
 
             if password == original_password:
@@ -206,15 +201,15 @@ class AuthenticationClass(UsersClass,AdminsClass):
             
             logging.info(f"AuthenticationClass : login_user : execution stop : status = {str(status)}")
             
-            connection.close()
+            #connection.close()
             return status,user_dict
         
         except Exception as e:
-            connection.close()
+            #connection.close()
             logging.info(f"AuthenticationClass : login_user : Function Failed : {str(e)}")
             return 3,None
 
-    def verify_uniqueid(self, u_id, flag = 0):
+    def verify_uniqueid(self, connection, u_id, flag = 0):
         '''
             Used to Verify the email id.
 
@@ -243,32 +238,29 @@ class AuthenticationClass(UsersClass,AdminsClass):
                 table_name = 'feasta.admins'
                 index = 'admin_id'
 
-            #? Getting Database Connection
-            connection,_ = self.get_db_connection()
-
             sql_command = f"select case when u.verification_code = '{u_id}' then '1' else '0' end as status from {table_name} u  where u.{index} = '{user_id}'"
             status_df = DB_OBJECT.select_records(connection, sql_command)
             
             if not isinstance(status_df,pd.DataFrame):
-                connection.close()
+                #connection.close()
                 return "Server Error! Retry Clicking on that link."
             status = str(status_df['status'][0])
             
             if status == "1":
                 sql_command = f"update {table_name} set verification_status = '1' where {index} = '{user_id}';"
                 update_status = DB_OBJECT.update_records(connection, sql_command)
-                connection.close()
+                #connection.close()
                 return "Verification Successful, Now visit the site and Login."
             else:
-                connection.close()
+                #connection.close()
                 return "Verification Failed! Use the correct Link."
             
             
         except Exception as e:
-            connection.close()
+            #connection.close()
             return str(e)
 
-    def get_user_login_status(self, user_id):
+    def get_user_login_status(self, connection, user_id):
         '''
             Used to get login status of the user.
 
@@ -285,12 +277,9 @@ class AuthenticationClass(UsersClass,AdminsClass):
                 - -2 : Failed to fetch the data 
         '''
         try:
-            #? Getting Database Connection
-            connection,_ = self.get_db_connection()
-
             sql_command = f"select u.login_status from feasta.users u where u.user_id = '{str(user_id)}'"
             login_status_df = DB_OBJECT.select_records(connection, sql_command)
-            connection.close()
+            #connection.close()
 
             if not isinstance(login_status_df,pd.DataFrame):
                 #? Failed To extract user data
@@ -309,7 +298,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
             logging.error(f"get_user_login_status : Exception Occurred : {str(e)}")
             return -2
 
-    def register_admin(self, first_name, last_name, password, email, mobile_number, canteen_name):
+    def register_admin(self, connection, first_name, last_name, password, email, mobile_number, canteen_name):
         '''
             For user regestration.
             
@@ -334,16 +323,13 @@ class AuthenticationClass(UsersClass,AdminsClass):
         logging.info("AuthenticationClass : register_admin : execution start")
         
         try:
-            #? Getting Database Connection
-            connection,_ = self.get_db_connection()
-            
             #? Checking if Some user exists with the same email address
             sql_command = f"select a.password from feasta.admins a where email_id = '{email}'"
             password_df = DB_OBJECT.select_records(connection, sql_command)
             
             if not isinstance(password_df, pd.DataFrame):
                 #! Function failed to select
-                connection.close()
+                #connection.close()
                 logging.error(f"AuthenticationClass : register_admin : function failed : Got Nonetype from Email selection query")
                 return 3
             
@@ -390,22 +376,22 @@ class AuthenticationClass(UsersClass,AdminsClass):
                     t1.start()
             else:
                 #? User exists with the same email
-                connection.close()
+                #connection.close()
                 logging.error(f"AuthenticationClass : register_admin : execution stop : User Exists with the same Email")
                 return 2
             
             logging.info(f"AuthenticationClass : register_admin : execution stop : status = {str(status)}")
             
-            connection.close()
+            #connection.close()
             return status
         
         except Exception as e:
             
-            connection.close()
+            #connection.close()
             logging.info(f"AuthenticationClass : register_admin : Function Failed : {str(e)}")
             return 3
     
-    def login_admin(self, email, password):
+    def login_admin(self, connection, email, password):
         '''
             For user regestration.
             
@@ -423,25 +409,23 @@ class AuthenticationClass(UsersClass,AdminsClass):
         try:
             logging.info("AuthenticationClass : login_admin : execution start")
             
-            connection,_ = self.get_db_connection()
-            
             sql_command = f"select a.admin_id,a.password,a.verification_status from feasta.admins a where email_id = '{email}'"
             password_df = DB_OBJECT.select_records(connection, sql_command)
             
             if not isinstance(password_df, pd.DataFrame):
                     #? Function failed to select
                     
-                    connection.close()
+                    #connection.close()
                     logging.error(f"AuthenticationClass : login_admin : function failed : Got Nonetype from Email selection query")
                     return 3,None
                 
             elif len(password_df) == 0:
-                connection.close()
+                #connection.close()
                 return 5,None
             
             elif int(password_df['verification_status']) == 0:
                 logging.info("AuthenticationClass : login_admin : execution stop : Email Verification Remaining")
-                connection.close()
+                #connection.close()
                 return 4,None
 
             original_password = str(password_df['password'][0])
@@ -451,7 +435,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
 
             if isinstance(admin_dict, str):
                 #? Failed to fetch admin details
-                connection.close()
+                #connection.close()
                 return 3,None
 
             if password == original_password:
@@ -468,11 +452,11 @@ class AuthenticationClass(UsersClass,AdminsClass):
             
             logging.info(f"AuthenticationClass : login_admin : execution stop : status = {str(status)}")
             
-            connection.close()
+            #connection.close()
             return status,admin_dict
         
         except Exception as e:
-            connection.close()
+            #connection.close()
             logging.info(f"AuthenticationClass : login_admin : Function Failed : {str(e)}")
             return 3,None
 

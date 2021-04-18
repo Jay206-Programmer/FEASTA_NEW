@@ -93,7 +93,7 @@ class MenuClass:
         
         return table_name, column_names
     
-    def add_category(self, admin_id, category_name, category_desc, image_path):
+    def add_category(self, connection ,admin_id, category_name, category_desc, image_path):
         '''
             To add Food Category.
             
@@ -112,9 +112,6 @@ class MenuClass:
 
         logging.info("MenuClass : add_category : execution start")
 
-        #? Getting Database Connection
-        connection,_ = self.get_db_connection()
-            
         #? Checking if Some user exists with the same email address
         sql_command = f"select c.category_id from feasta.category c where c.category_name  = '{category_name}' and c.admin_id = '{admin_id}'"
         category_df = DB_OBJECT.select_records(connection, sql_command)
@@ -123,7 +120,7 @@ class MenuClass:
             #? Function failed to select
             
             logging.error(f"MenuClass : add_category : function failed : Got Nonetype from Category Name selection query")
-            connection.close()
+            #connection.close()
             return 3, None
             
         elif len(category_df) == 0:
@@ -138,15 +135,15 @@ class MenuClass:
 
         else:
             logging.error(f"MenuClass : add_category : function failed : More than one categories with the same name exists")
-            connection.close()
+            #connection.close()
             return 2, None
 
-        connection.close()
+        #connection.close()
         logging.info("MenuClass : add_category : execution stop")
 
         return status,index
     
-    def get_category_details(self,admin_id):
+    def get_category_details(self, connection,admin_id):
         '''
             Get all the categories for given admin.
             
@@ -164,13 +161,10 @@ class MenuClass:
         try:
             logging.info("MenuClass : get_category_details : execution start")
             
-            #? Getting Database Connection
-            connection,_ = self.get_db_connection()
-            
             #? Getting Data from the database
             sql_command = f"select * from feasta.category c where c.admin_id = '{admin_id}'"
             category_df = DB_OBJECT.select_records(connection, sql_command)
-            connection.close()
+            #connection.close()
             
             if not isinstance(category_df, pd.DataFrame):
                 logging.error("MenuClass : get_category_details : Failed to fetch the Dataframe")
@@ -191,7 +185,7 @@ class MenuClass:
             logging.error(f"MenuClass : get_category_details : Function Failed : error => {str(e)}")
             return 1,None
         
-    def add_item(self, admin_id, item_name, item_desc, category_id, price,quantity , image_path):
+    def add_item(self, connection, admin_id, item_name, item_desc, category_id, price,quantity , image_path):
         '''
             To add Item to the database.
             
@@ -214,9 +208,6 @@ class MenuClass:
         try:
             logging.info("MenuClass : add_item : execution start")
 
-            #? Getting Database Connection
-            connection,_ = self.get_db_connection()
-                
             #? Checking if Some item exists with the name for same admin
             sql_command = f"select count(*) from feasta.menu m,feasta.category c where c.admin_id = '{str(admin_id)}' and m.category_id = c.category_id and m.item_name = '{item_name}'"
             item_name_df = DB_OBJECT.select_records(connection, sql_command)
@@ -225,7 +216,7 @@ class MenuClass:
                 #? Function failed to select
                 
                 logging.error(f"MenuClass : add_item : function failed : Got Nonetype from Category Name selection query")
-                connection.close()
+                #connection.close()
                 return 3, None
                 
             elif int(item_name_df['count'][0]) == 0:
@@ -238,11 +229,11 @@ class MenuClass:
                 
                 #? Inserting data
                 status,index = DB_OBJECT.insert_records(connection, table_name, data, cols, index= 'item_id',Flag=1)
-                connection.close()
+                #connection.close()
                 
             else:
                 logging.error(f"MenuClass : add_item : function failed : More than one items with the same name exists")
-                connection.close()
+                #connection.close()
                 return 2, None
 
             logging.info("MenuClass : add_item : execution stop")
@@ -251,10 +242,10 @@ class MenuClass:
         
         except Exception as e:
             logging.error(f"MenuClass : add_item : execution failed : Error : {str(e)}")
-            connection.close()
+            #connection.close()
             return 3, None
     
-    def update_item(self, admin_id, item_id, item_name, item_desc, category_id, price,quantity , image_path):
+    def update_item(self, connection, admin_id, item_id, item_name, item_desc, category_id, price,quantity , image_path):
         '''
             To add Item to the database.
             
@@ -278,9 +269,6 @@ class MenuClass:
         try:
             logging.info("MenuClass : update_item : execution start")
 
-            #? Getting Database Connection
-            connection,_ = self.get_db_connection()
-                
             #? Checking if Some item exists with the name for same admin
             sql_command = f"select count(*) from feasta.menu m,feasta.category c where c.admin_id = '{str(admin_id)}' and m.category_id = c.category_id and m.item_name = '{item_name}'"
             item_name_df = DB_OBJECT.select_records(connection, sql_command)
@@ -288,7 +276,7 @@ class MenuClass:
             if not isinstance(item_name_df, pd.DataFrame):
                 #? Function failed to select
                 
-                connection.close()
+                #connection.close()
                 logging.error(f"MenuClass : update_item : function failed : Got Nonetype from Category Name selection query")
                 return 3, None
                 
@@ -308,11 +296,11 @@ class MenuClass:
                 logging.info(f"Sql Command for Update => {sql_command}")
                 #? Inserting data
                 status = DB_OBJECT.update_records(connection, sql_command)
-                connection.close()
+                #connection.close()
                 
             else:
                 logging.error(f"MenuClass : update_item : function failed : More than one items with the same name exists")
-                connection.close()
+                #connection.close()
                 return 2, None
 
             logging.info("MenuClass : update_item : execution stop")
@@ -321,10 +309,10 @@ class MenuClass:
         
         except Exception as e:
             logging.error(f"MenuClass : update_item : execution failed : Error : {str(e)}")
-            connection.close()
+            #connection.close()
             return 3, None
     
-    def get_item_details(self,admin_id, item_id = -1, category_id = -1):
+    def get_item_details(self, connection, admin_id, item_id = -1, category_id = -1):
         '''
             Get all the items for given admin.
             
@@ -343,9 +331,6 @@ class MenuClass:
         '''
         try:
             logging.info("MenuClass : get_item_details : execution start")
-            
-            #? Getting Database Connection
-            connection,_ = self.get_db_connection()
             
             if item_id != -1:
                 #? User need list for specific item
@@ -371,7 +356,7 @@ class MenuClass:
                 """
             logging.info(f"Get Item Sql Command -> {sql_command}")
             item_df = DB_OBJECT.select_records(connection, sql_command)
-            connection.close()
+            #connection.close()
             
             if not isinstance(item_df, pd.DataFrame):
                 logging.error("MenuClass : get_item_details : Failed to fetch the Dataframe")
@@ -387,7 +372,7 @@ class MenuClass:
             logging.error(f"MenuClass : get_item_details : Function Failed : error => {str(e)}")
             return 1,None
         
-    def delete_item(self, admin_id, item_id):
+    def delete_item(self, connection, admin_id, item_id):
         '''
             Used to delete Item from table.
             
@@ -406,9 +391,6 @@ class MenuClass:
         try:
             logging.info("MenuClass : delete_item : execution start")
             
-            #? Getting Database Connection
-            connection,_ = self.get_db_connection()
-            
             #? Getting Data from the database
             sql_command = f"""
             delete from feasta.menu where item_id = '{item_id}'
@@ -416,7 +398,7 @@ class MenuClass:
             status = DB_OBJECT.delete_records(connection, sql_command)
             
             if status == 1:
-                connection.close()
+                #connection.close()
                 logging.info("MenuClass : delete_item : Deletion Failed")
                 return 1,None
             
@@ -431,7 +413,7 @@ class MenuClass:
             order by m.item_name asc ;
             """
             item_df = DB_OBJECT.select_records(connection, sql_command)
-            connection.close()
+            #connection.close()
             
             if not isinstance(item_df, pd.DataFrame):
                 logging.error("MenuClass : delete_item : Failed to fetch the Dataframe")

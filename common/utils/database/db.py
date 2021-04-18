@@ -22,6 +22,11 @@ from .heroku_db_creds import *
 #? Initializing logger
 logger = LogClass().get_logger('database')
 
+#? Initializing Objects
+connection_string = "postgresql://" + user + ":" + password + "@" + host + ":" + port + "/" + database # Make database connection string.
+ENGINE = create_engine(connection_string) # Create database ENGINE.
+            
+
 class DBClass:
     '''
         For Database Related Functionalities.
@@ -230,10 +235,8 @@ class DBClass:
         sql_command = str(sql_command).replace('%',"%%") # Get sql command.
         try :
         
-            connection_string = "postgresql://" + user + ":" + password + "@" + host + ":" + port + "/" + database # Make database connection string.
-            engine = create_engine(connection_string) # Create database engine.
-            data = pd.read_sql_query(sql_command, engine) #method of sqlalchemy
-            engine.dispose()
+            data = pd.read_sql_query(sql_command, ENGINE) #method of sqlalchemy
+            # ENGINE.dispose()
             return data   
         except(Exception, psycopg2.DatabaseError) as error:
             logging.info(str(error) + "check")
@@ -306,12 +309,11 @@ class DBClass:
             [integer]: [it will return status of loaded data into database table. if successfully then 0 else 1.]
         """
     
-        engine = create_engine(connection_string) # Create database engine.
         schema_name = user_name.lower()
         try :
             
-            file_data_df.to_sql(table_name,engine,schema=schema_name,) # Load data into database with table structure.
-            engine.dispose()
+            file_data_df.to_sql(table_name,ENGINE,schema=schema_name,) # Load data into database with table structure.
+            # engine.dispose()
             status = 0 # If successfully.
         except Exception as e:
             logging.error("Exception: "+str(e))

@@ -15,6 +15,7 @@ logger = LogClass().get_logger('auth_views')
 
 #* Defining Class Objects
 AUTH_OBJECT = auth.AuthenticationClass()
+CONNECTION, CONNECTION_URL = AUTH_OBJECT.get_db_connection()
 
 class UserLoginClass(APIView):
         
@@ -30,7 +31,7 @@ class UserLoginClass(APIView):
                     email = request_data['email_id']
                     password = request_data['password']
                     
-                    status,user_dict = AUTH_OBJECT.login_user(email,password)
+                    status,user_dict = AUTH_OBJECT.login_user(CONNECTION,email,password)
                     
                     if status == 0:
                         #? User Regestration Successful
@@ -84,7 +85,8 @@ class UserRegestrationClass(APIView):
                     password = request_data['password']
                     phone_number = request_data['phone_number']
                     
-                    status = AUTH_OBJECT.register_user(first_name,last_name, \
+                    status = AUTH_OBJECT.register_user(CONNECTION, \
+                                                        first_name,last_name, \
                                                         password, email, \
                                                         phone_number )
                     
@@ -120,11 +122,11 @@ class UserRegestrationClass(APIView):
                     return Response({"status_code":500,"response_msg":str(e)})
         
 def verify_user(request, unique_id):
-    message = AUTH_OBJECT.verify_uniqueid(unique_id)
+    message = AUTH_OBJECT.verify_uniqueid(CONNECTION,unique_id)
     return HttpResponse(message, content_type='text/html')
 
 def verify_admin(request, unique_id):
-    message = AUTH_OBJECT.verify_uniqueid(unique_id,flag = 1)
+    message = AUTH_OBJECT.verify_uniqueid(CONNECTION,unique_id,flag = 1)
     return HttpResponse(message, content_type='text/html')
 
 class LoginStatusClass(APIView):
@@ -140,7 +142,7 @@ class LoginStatusClass(APIView):
                     #? Fatching parameters
                     user_id = request_data['user_id']
                     
-                    status = AUTH_OBJECT.get_user_login_status(user_id)
+                    status = AUTH_OBJECT.get_user_login_status(CONNECTION,user_id)
                     
                     if status == -1:
                         #? Can't find the user_id
@@ -180,7 +182,8 @@ class AdminRegestrationClass(APIView):
                     password = request_data['password']
                     phone_number = request_data['phone_number']
                     
-                    status = AUTH_OBJECT.register_admin(first_name,last_name, \
+                    status = AUTH_OBJECT.register_admin(CONNECTION, \
+                                                        first_name,last_name, \
                                                         password, email, \
                                                         phone_number, canteen_name)
                     
@@ -229,7 +232,7 @@ class AdminLoginClass(APIView):
                     email = request_data['email_id']
                     password = request_data['password']
                     
-                    status,admin_dict = AUTH_OBJECT.login_admin(email,password)
+                    status,admin_dict = AUTH_OBJECT.login_admin(CONNECTION,email,password)
                     
                     if status == 0:
                         #? User Regestration Successful
