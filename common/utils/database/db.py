@@ -24,9 +24,8 @@ logger = LogClass().get_logger('database')
 
 #? Initializing Objects
 connection_string = "postgresql://" + user + ":" + password + "@" + host + ":" + port + "/" + database # Make database connection string.
-ENGINE = create_engine(connection_string) # Create database ENGINE.
+# ENGINE = create_engine(connection_string) # Create database ENGINE.
             
-
 class DBClass:
     '''
         For Database Related Functionalities.
@@ -235,9 +234,11 @@ class DBClass:
         sql_command = str(sql_command).replace('%',"%%") # Get sql command.
         try :
         
-            data = pd.read_sql_query(sql_command, ENGINE) #method of sqlalchemy
+            data = pd.read_sql(sql_command, connection) # Read data from database table.
+            # data = pd.read_sql_query(sql_command, ENGINE) #method of sqlalchemy
             # ENGINE.dispose()
             return data   
+
         except(Exception, psycopg2.DatabaseError) as error:
             logging.info(str(error) + "check")
             return None
@@ -296,72 +297,72 @@ class DBClass:
             logging.error(str(error))
         return status
 
-    def load_df_into_db(self,connection_string,table_name,file_data_df,user_name):
-        """This function is used to load csv data  into database table.
+    # def load_df_into_db(self,connection_string,table_name,file_data_df,user_name):
+    #     """This function is used to load csv data  into database table.
 
-        Args:
-            connection_string ([object]): [connection string of the database connection.],
-            table_name ([string]): [name of the table.],
-            file_data_df ([dataframe]): [dataframe of the file data.],
-            user_name ([string]): [name of the user.]
+    #     Args:
+    #         connection_string ([object]): [connection string of the database connection.],
+    #         table_name ([string]): [name of the table.],
+    #         file_data_df ([dataframe]): [dataframe of the file data.],
+    #         user_name ([string]): [name of the user.]
 
-        Returns:
-            [integer]: [it will return status of loaded data into database table. if successfully then 0 else 1.]
-        """
+    #     Returns:
+    #         [integer]: [it will return status of loaded data into database table. if successfully then 0 else 1.]
+    #     """
     
-        schema_name = user_name.lower()
-        try :
+    #     schema_name = user_name.lower()
+    #     try :
             
-            file_data_df.to_sql(table_name,ENGINE,schema=schema_name,) # Load data into database with table structure.
-            # engine.dispose()
-            status = 0 # If successfully.
-        except Exception as e:
-            logging.error("Exception: "+str(e))
-            status = 1 # If failed.
+    #         file_data_df.to_sql(table_name,ENGINE,schema=schema_name,) # Load data into database with table structure.
+    #         # engine.dispose()
+    #         status = 0 # If successfully.
+    #     except Exception as e:
+    #         logging.error("Exception: "+str(e))
+    #         status = 1 # If failed.
             
-        return status
+    #     return status
 
-    def is_existing_table(self,connection,table_name,schema):
-        """ function used to check the table is Exists or Not in database
+    # def is_existing_table(self,connection,table_name,schema):
+    #     """ function used to check the table is Exists or Not in database
 
-        Args:
-                table_name[(String)] : [Name of the table]
-                schema[String] : [Name of the Schema]
-        Return : 
-            [String] : [return the True if record found else False]
-        """
-        sql_command = "SELECT 1 FROM information_schema.tables WHERE table_schema ='"+schema+"' AND table_name = '"+table_name+"'"
-        data=self.select_records(connection,sql_command) #call select_records which return data if found else None
-        print(str(data) + "checking")
-        if len(data) == 0: # check whether length of data is empty or not
-            self.create_schema(connection)
-            return "False"
-        else:
-            return "True"
+    #     Args:
+    #             table_name[(String)] : [Name of the table]
+    #             schema[String] : [Name of the Schema]
+    #     Return : 
+    #         [String] : [return the True if record found else False]
+    #     """
+    #     sql_command = "SELECT 1 FROM information_schema.tables WHERE table_schema ='"+schema+"' AND table_name = '"+table_name+"'"
+    #     data=self.select_records(connection,sql_command) #call select_records which return data if found else None
+    #     print(str(data) + "checking")
+    #     if len(data) == 0: # check whether length of data is empty or not
+    #         self.create_schema(connection)
+    #         return "False"
+    #     else:
+    #         return "True"
     
-    def user_authentication(self,connection,user_name,password):
-        """[summary]
+    # def user_authentication(self,connection,user_name,password):
+    #     """[summary]
 
-        Args:
-            connection ([String]): [connection String]
-            user_name ([String]): [User Name]
-            password ([String]): [password]
+    #     Args:
+    #         connection ([String]): [connection String]
+    #         user_name ([String]): [User Name]
+    #         password ([String]): [password]
 
-        Raises:
-            UserAuthenticationFailed: [User authentication failed]
-        Returns:
-            [String]: [if user authenticated then it return True]
-        """
-        try:
-            sql_command = "SELECT user_name from feasta.user_auth_tbl where user_name='"+ str(user_name) +"' and password='"+ str(password) +"'"
-            user_df = self.select_records(connection,sql_command)
-            if user_df is None:
-                raise UserAuthenticationFailed(500)          
-            if len(user_df) > 0 :
-                return True
-            else:
-                raise UserAuthenticationFailed(500)
-        except UserAuthenticationFailed as exc:
-            return exc.msg
+    #     Raises:
+    #         UserAuthenticationFailed: [User authentication failed]
+    #     Returns:
+    #         [String]: [if user authenticated then it return True]
+    #     """
+    #     try:
+    #         sql_command = "SELECT user_name from feasta.user_auth_tbl where user_name='"+ str(user_name) +"' and password='"+ str(password) +"'"
+    #         user_df = self.select_records(connection,sql_command)
+    #         if user_df is None:
+    #             raise UserAuthenticationFailed(500)          
+    #         if len(user_df) > 0 :
+    #             return True
+    #         else:
+    #             raise UserAuthenticationFailed(500)
+    #     except UserAuthenticationFailed as exc:
+    #         return exc.msg
   
     
