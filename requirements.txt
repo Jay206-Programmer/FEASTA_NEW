@@ -1,5 +1,5 @@
+numpy==1.19.5
 pandas
-numpy
 psycopg2
 django
 sqlalchemy
