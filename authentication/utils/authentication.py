@@ -124,7 +124,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
             logging.info(f"AuthenticationClass : register_user : Function Failed : {str(e)}")
             return 3
     
-    def send_email(self,user_name,email,unique_id,template_path):
+    def send_email(self,user_name,email_id,unique_id,template_path):
         with open(template_path) as tmp:
             template = tmp.read()
 
@@ -134,7 +134,7 @@ class AuthenticationClass(UsersClass,AdminsClass):
             'Confirm Regestration',
             template,
             EMAIL_HOST_USER,
-            ["jayshukla0034@gmail.com"],
+            [email_id],
         )
         email.fail_silently = False
         email.send()
