@@ -18,8 +18,8 @@ class CommonClass(APIView):
                         Response(return false if failed otherwise true)
                 """
                 try:
-                    return Response({"status_code":200,"error_msg":"PAGE WORKING","response":"false"})
+                    return Response({"status_code":200,"error_msg":"PAGE WORKING","response":"True"})
                         
                 except Exception as e:
-                    return Response({"status_code":"500","error_msg":str(e),"response":"false"})
+                    return Response({"status_code":"500","error_msg":str(e),"response":"False"})
         

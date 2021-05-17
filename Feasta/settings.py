@@ -60,6 +60,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS =[
     'http://localhost:3000',
+    'https://feasta-admin-app.vercel.app',
     ]
 
 ROOT_URLCONF = 'Feasta.urls'
