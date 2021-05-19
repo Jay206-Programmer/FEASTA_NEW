@@ -21,5 +21,5 @@ def KeepHerokuAlive():
         res = requests.get("https://feasta-postgres.herokuapp.com/common/")
         time.sleep(1700)
         
-t1 = threading.Thread(target=KeepHerokuAlive)
-t1.start()
+t3 = threading.Thread(target=KeepHerokuAlive)
+t3.start()

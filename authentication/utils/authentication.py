@@ -105,8 +105,8 @@ class AuthenticationClass(UsersClass,AdminsClass):
                     sql_command = f"update feasta.users set verification_code = '{unique_id}' where user_id = '{user_id}'"
                     update_status = DB_OBJECT.update_records(connection, sql_command)
 
-                    t1 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],user_dict['email_id'],new_unique_id,'authentication/utils/authentication_email.html'))
-                    t1.start()
+                    t2 = threading.Thread(target=self.send_email, args=(user_dict['first_name'],user_dict['email_id'],new_unique_id,'authentication/utils/authentication_email.html'))
+                    t2.start()
             else:
                 #? User exists with the same email
                 #connection.close()
