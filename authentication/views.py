@@ -124,7 +124,7 @@ class UserRegestrationClass(APIView):
         
 def verify_user(request, unique_id):
     message = AUTH_OBJECT.verify_uniqueid(CONNECTION,unique_id)
-    return redirect("https://feasta-admin-app.vercel.app/login")
+    return redirect("https://feasta-client-side.vercel.app/login")
 
 def verify_admin(request, unique_id):
     message = AUTH_OBJECT.verify_uniqueid(CONNECTION,unique_id,flag = 1)
