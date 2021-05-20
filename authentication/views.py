@@ -4,7 +4,7 @@ import json
 import traceback
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import HttpResponse
+from django.http import HttpResponse, response
 from django.shortcuts import redirect
 
 #* Relative Imports
@@ -269,3 +269,85 @@ class AdminLoginClass(APIView):
                     logging.error(f"AdminLoginClass : Execution Failed : Error : {str(e)}")
                     return Response({"status_code":500,"response_msg":str(e)})
         
+class CanteenInfoClass(APIView):
+        
+        def get(self,request,format=None):
+                
+                try:
+                    logging.info("CanteenInfoClass : Execution Start")
+                    
+                    status,response = AUTH_OBJECT.get_canteens(CONNECTION)
+                    
+                    if status == 0:
+                        #? User Regestration Successful
+                        
+                        logging.info("CanteenInfoClass : Execution End : Successful")
+                        return Response({"status_code":200,"response_msg":"Successful Retrival","data":response})
+                    elif status == 1:
+                        #? Wrong Password
+                        
+                        logging.info("CanteenInfoClass : Execution End : Failed")
+                        return Response({"status_code":500,"response_msg":"Failed to get Canteens","data":response})
+                        
+                except Exception as e:
+                    logging.error(f"CanteenInfoClass : Execution Failed : Error : {str(e)}")
+                    return Response({"status_code":500,"response_msg":str(e)})
+        
+
+class GetReviewsClass(APIView):
+        
+        def get(self,request,format=None):
+                
+                try:
+                    logging.info("GetReviewsClass : Execution Start")
+                    
+                    status,response = AUTH_OBJECT.get_reviews(CONNECTION)
+                    
+                    if status == 0:
+                        #? User Regestration Successful
+                        
+                        logging.info("GetReviewsClass : Execution End : Successful")
+                        return Response({"status_code":200,"response_msg":"Successful","data":json.loads(response)})
+                    elif status == 1:
+                        #? Wrong Password
+                        
+                        logging.info("GetReviewsClass : Execution End : Failed")
+                        return Response({"status_code":500,"response_msg":"Failed to get Reviews","data":response})
+                        
+                except Exception as e:
+                    logging.error(f"GetReviewsClass : Execution Failed : Error : {str(e)}")
+                    return Response({"status_code":500,"response_msg":str(e)})
+        
+class PostReviewClass(APIView):
+        
+        def post(self,request,format=None):
+                
+                try:
+                    logging.info("PostReviewClass : Execution Start")
+                    
+                    #? Converting Json request from frontend into python dictionary
+                    request_data = json.loads(request.body)
+                    
+                    #? Fatching parameters
+                    user_id = request_data['user_id']
+                    reviews = request_data['review']
+                    rating = request_data['ratings']
+                    profession = request_data.get('profession','Customer')
+                    
+                    status = AUTH_OBJECT.post_review(CONNECTION,user_id,reviews,rating,profession)
+                    
+                    if status == 0:
+                        #? User Regestration Successful
+                        
+                        logging.info("PostReviewClass : Execution End : Successful")
+                        return Response({"status_code":200,"response_msg":"Successful"})
+                    else:
+                        #? Unknown Error Occurred
+                        
+                        logging.info("PostReviewClass : Execution End : Unknown Error")
+                        return Response({"status_code":500,"response_msg":"Unknown Error occurred while posting review"})
+                        
+                except Exception as e:
+                    logging.error(f"PostReviewClass : Execution Failed : Error : {str(e)}")
+                    return Response({"status_code":500,"response_msg":str(e)})
+

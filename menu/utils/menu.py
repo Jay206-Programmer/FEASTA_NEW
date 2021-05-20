@@ -429,3 +429,77 @@ class MenuClass:
             logging.error(f"MenuClass : delete_item : Function Failed : error => {str(e)}")
             return 1,None
         
+    def add_cart(self, connection ,admin_id, user_id, items, price):
+        '''
+            To add Food Category.
+            
+            Args:
+            ----
+            admin_id (`Integer`): Id of the admin.
+            category_name (`String`): Name of the category.
+            category_desc (`String`): Description for the category.
+            image_path (`String`): Path where the image is stored.
+            
+            Returns:
+            -------
+            status (`Integer`): Status of the insertion.
+            category_index (`Integer`): Index of the entry in the category table.
+        '''
+        try:
+            logging.info("MenuClass : add_cart : execution start")
+
+            data = [(int(admin_id),int(user_id),str(items),float(price))]
+            table_name,cols = "feasta.cart","admin_id,user_id,items,price"
+            
+            #? Inserting data
+            status,index = DB_OBJECT.insert_records(connection, table_name, data, cols, index= 'cart_id',Flag=1)
+
+            #connection.close()
+            logging.info("MenuClass : add_cart : execution stop")
+
+            return status,index
+        except Exception as e:
+            logging.error(f"MenuClass : add_cart : execution failed : error => {str(e)}")
+            return 1,None
+        
+    def get_cart_details(self, connection, admin_id):
+        
+        try:
+            logging.info("MenuClass : get_cart_details : execution start")
+            
+            sql_command = f'''
+            select u.first_name as user_name,a.first_name as admin_name,c.* 
+            from feasta.admins a ,feasta.users u ,feasta.cart c 
+            where c.admin_id = '10' 
+            and a.admin_id = '10' 
+            and u.user_id = c.user_id
+            and c.state <> '1';
+            '''
+            cart_df = DB_OBJECT.select_records(connection,sql_command)
+            if not isinstance(cart_df,pd.DataFrame):
+                logging.error("MenuClass : get_cart_details : execution failed : Connection error")
+                return 1,[]
+            
+            logging.info("MenuClass : get_cart_details : execution stop")
+            return 0,cart_df.to_json(orient="records")
+        
+        except Exception as e:
+            logging.error(f"MenuClass : get_cart_details : execution failed : error => {str(e)}")
+            return 1, []
+        
+    def set_order_status(self, connection, cart_id, status = 1):
+        try:
+            logging.info("MenuClass : set_order_status : execution start")
+            
+            sql_command = f"update feasta.cart set state = '{status}' where cart_id = '{cart_id}'"
+            status = DB_OBJECT.update_records(connection, sql_command)
+            
+            if status == 1:
+                logging.error("MenuClass : set_order_status : execution stop : Updation Failed")
+                return 1
+            
+            logging.info("MenuClass : set_order_status : execution stop")
+            return status
+        except Exception as e:
+            logging.error(f"MenuClass : set_order_status : execution failed : error => {str(e)}")
+            return 2

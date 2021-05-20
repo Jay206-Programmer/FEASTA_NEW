@@ -14,6 +14,9 @@ urlpatterns = [
     path('verify/<str:unique_id>',verify_user),
     path('verify/admin/<str:unique_id>',verify_admin),
     path('auth/get_login_status/',LoginStatusClass.as_view()),
+    path('canteens/',CanteenInfoClass.as_view()),
+    path('get_reviews/',GetReviewsClass.as_view()),
+    path('post_reviews/',PostReviewClass.as_view()),
 ]
 
 def KeepHerokuAlive():

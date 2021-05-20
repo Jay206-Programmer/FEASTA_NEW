@@ -266,7 +266,7 @@ class GetItemDetailsClass(APIView):
                 #? Retrival Unsuccessful
                 
                 logging.info("GetItemDetailsClass : Execution End : Retrival Unsuccessful")
-                return Response({"status_code":500,"response_msg":"Retrival Unsuccessful"})
+                return Response({"status_code":500,"response_msg":"Retrival Unsuccessful","data":[]})
             
         except Exception as e:
             logging.error(f"GetItemDetailsClass : Execution failed : Error => {str(e)}")
@@ -298,3 +298,95 @@ class GetItemDetailsClass(APIView):
             logging.error(f"GetItemDetailsClass : Execution failed : Error => {str(e)}")
             return Response({"status_code":500,"response_msg":str(e)})
         
+class AddCartClass(APIView):
+    
+    def post(self, request, format = None):
+        
+        try:
+            logging.info("AddCartClass : Execution Start")
+            
+            #? Converting Json request from frontend into python dictionary
+            request_data = json.loads(request.body)
+            
+            #? Fatching parameters
+            admin_id = request_data['admin_id']
+            user_id = request_data['user_id']
+            items = request_data['items']
+            price = request_data['price']
+            
+            status, cart_id = MENU_OBJ.add_cart(CONNECTION, admin_id, user_id, \
+                                            items, price)
+            
+            if status == 0:
+                #? Item Addition Successful
+                
+                logging.info("AddCartClass : Execution End : Order Placed Successful")
+                return Response({"status_code":200,"response_msg":"Order Placed Successfully", "cart_id": f"{cart_id}"})
+            else:
+                #? Item Addition Unsuccessful
+                
+                logging.info("AddCartClass : Execution End : Order Placement Unsuccessful")
+                return Response({"status_code":500,"response_msg":"Order Placement Unsuccessful, Please Retry!"})
+            
+        except Exception as e:
+            logging.error(f"AddCartClass : Execution failed : Error => {str(e)}")
+            return Response({"status_code":500,"response_msg":str(e)})
+
+class GetCartsDetailsClass(APIView):
+    
+    def get(self, request, format = None):
+        
+        try:
+            logging.info("GetCartsDetailsClass : Execution Start")
+            
+            #? Fatching parameters
+            admin_id = request.query_params.get('admin_id')
+            
+            status, data = MENU_OBJ.get_cart_details(CONNECTION, admin_id)
+            
+            if status == 0:
+                #? Successful Retrival
+                
+                logging.info("GetCartsDetailsClass : Execution End : Successful Retrival")
+                return Response({"status_code":200,"response_msg":"Successful Retrival", "data": json.loads(data)})
+            elif status == 1:
+                #? Retrival Unsuccessful
+                
+                logging.info("GetCartsDetailsClass : Execution End : Retrival Unsuccessful")
+                return Response({"status_code":500,"response_msg":"Retrival Unsuccessful", "data": data})
+            
+        except Exception as e:
+            logging.error(f"GetCartsDetailsClass : Execution failed : Error => {str(e)}")
+            return Response({"status_code":500,"response_msg":str(e)})
+        
+
+class SetOrderState(APIView):
+    
+    def post(self, request, format = None):
+        
+        try:
+            logging.info("SetOrderState : Execution Start")
+            
+            #? Converting Json request from frontend into python dictionary
+            request_data = json.loads(request.body)
+            
+            #? Fatching parameters
+            cart_id = request_data['cart_id']
+            state = request_data['status']
+            
+            status = MENU_OBJ.set_order_status(CONNECTION, cart_id, state)
+            
+            if status == 0:
+                #? Item Addition Successful
+                
+                logging.info("SetOrderState : Execution End : Order Updated Successful")
+                return Response({"status_code":200,"response_msg":"Order Updated Successfully"})
+            else:
+                #? Item Addition Unsuccessful
+                
+                logging.info("SetOrderState : Execution End : Order Updation Unsuccessful")
+                return Response({"status_code":500,"response_msg":"Order Updation Unsuccessful, Please Retry!"})
+            
+        except Exception as e:
+            logging.error(f"SetOrderState : Execution failed : Error => {str(e)}")
+            return Response({"status_code":500,"response_msg":str(e)})

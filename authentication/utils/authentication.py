@@ -460,3 +460,60 @@ class AuthenticationClass(UsersClass,AdminsClass):
             logging.info(f"AuthenticationClass : login_admin : Function Failed : {str(e)}")
             return 3,None
 
+    def get_canteens(self, connection):
+        
+        try:
+            logging.info("AuthenticationClass : get_canteens : execution start")
+            
+            sql_command = "select a.admin_id,c.canteen_name from feasta.admins a,feasta.canteens c where c.canteen_id = a.canteen_id"
+            canteen_df = DB_OBJECT.select_records(connection, sql_command)
+            admin_ids, canteen_names = canteen_df['admin_id'], canteen_df['canteen_name']
+            res = []
+            for admin_id, canteen_name in zip(admin_ids, canteen_names):
+                res.append({
+                    "admin_id":admin_id,
+                    "canteen_name": canteen_name
+                })
+            
+            logging.info("AuthenticationClass : get_canteens : execution stop")
+            
+            return 0,res
+        except Exception as e:
+            logging.info(f"AuthenticationClass : get_canteens : Function Failed : {str(e)}")
+            return 1,[]
+        
+    def post_review(self, connection, user_id, review, rating, profession = 'customer'):
+        try:
+            logging.info("AuthenticationClass : post_review : execution start")
+            sql_command = f'''
+            select concat(first_name,' ',last_name) as "name" from feasta.users where user_id = '{user_id}';
+            '''
+            # name_df = DB_OBJECT.select_records(connection,sql_command)
+            # name = name_df['name'][0]
+            
+            table_name,cols = 'feasta.reviews','review,profession,user_id,rating'
+            data = [(str(review),str(profession),int(user_id),int(rating))]
+            
+            #? Inserting data
+            status,_ = DB_OBJECT.insert_records(connection, table_name, data, cols, index= 'review_id')
+            
+            logging.info("AuthenticationClass : post_review : execution stop")
+            return status
+        except Exception as e:
+            logging.error(f"AuthenticationClass : post_review : Function Failed : {str(e)}")
+            return 1
+        
+    def get_reviews(self, connection):
+        try:
+            logging.info("AuthenticationClass : get_reviews : execution start")
+            sql_command = '''
+            select concat(u.first_name,' ',u.last_name) as "name",r.* from feasta.users u,feasta.reviews r where u.user_id = r.user_id 
+            '''
+            reviews_df = DB_OBJECT.select_records(connection, sql_command)
+            
+            logging.info("AuthenticationClass : get_reviews : execution stop")
+            
+            return 0,reviews_df.to_json(orient='records')
+        except Exception as e:
+            logging.error(f"AuthenticationClass : post_review : Function Failed : {str(e)}")
+            return 1,[]
