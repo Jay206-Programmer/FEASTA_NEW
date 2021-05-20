@@ -85,11 +85,11 @@ class GetCategoryDetailsClass(APIView):
                 #? Retrival Unsuccessful
                 
                 logging.info("GetCategoryDetailsClass : Execution End : Retrival Unsuccessful")
-                return Response({"status_code":500,"response_msg":"Retrival Unsuccessful"})
+                return Response({"status_code":500,"response_msg":"Retrival Unsuccessful", "data": data})
             
         except Exception as e:
             logging.error(f"GetCategoryDetailsClass : Execution failed : Error => {str(e)}")
-            return Response({"status_code":500,"response_msg":str(e)})
+            return Response({"status_code":500,"response_msg":str(e),"data":[]})
 
 class AddItemClass(APIView):
     
