@@ -470,8 +470,8 @@ class MenuClass:
             sql_command = f'''
             select u.first_name as user_name,a.first_name as admin_name,c.* 
             from feasta.admins a ,feasta.users u ,feasta.cart c 
-            where c.admin_id = '10' 
-            and a.admin_id = '10' 
+            where c.admin_id = '{admin_id}' 
+            and a.admin_id = '{admin_id}' 
             and u.user_id = c.user_id
             and c.state <> '1';
             '''
